@@ -8,6 +8,14 @@
 
 > Feel free to review the code. <br>  Feedbacks are always welcome!
 
+
+# Project Structure
+
+<p align="center">
+  <img src="/screenshots/project_structure.PNG"/> 
+</p>
+
+
 # Enviroment
 
 |                    |                         |
