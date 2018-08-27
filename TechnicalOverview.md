@@ -4,7 +4,7 @@
   <img src="https://media.giphy.com/media/3o7rc0qU6m5hneMsuc/giphy.gif" width="350" height="350"/> 
 </p>
 
-### The codebase has been developed maintaining standard guidelines; architecture and design patterns.<br> Considering future scaling of the application, the codebase is kept modular.
+#### The codebase has been developed maintaining standard guidelines; architecture and design patterns. Considering future scaling of the application, the codebase is kept modular.
 
 > Feel free to review the code. <br>  Feedbacks are always welcome!
 
@@ -79,8 +79,6 @@
 <br> [Semantic App Versioning](https://medium.com/@maxirosson/versioning-android-apps-d6ec171cfd82)
 <br><br> and whatever seems helpful...
 
-<br>
-<br>
 <br>
 <br>
 
