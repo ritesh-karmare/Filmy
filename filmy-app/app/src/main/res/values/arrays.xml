@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="rainbow">
+
+        <item>@android:color/holo_orange_light</item>
+        <item>@android:color/holo_purple</item>
+        <item>@android:color/holo_red_light</item>
+        <item>@android:color/holo_blue_bright</item>
+        <item>@android:color/holo_green_light</item>
+
+
+    </integer-array>
+
+
+    <color name="red">#ff0000</color>
+    <color name="blue">#0000ff</color>
+
+    <string-array name="tab_labels">
+        <item>Now Playing</item>
+        <item>Upcoming</item>
+        <item>Top Rated</item>
+        <item>Popular</item>
+    </string-array>
+
+</resources>

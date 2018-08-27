@@ -1,3 +1,6 @@
+/.idea/modules.xml
+.DS_Store
+
 # Built application files
 *.apk
 *.ap_
@@ -45,7 +48,6 @@ captures/
 # Keystore files
 # Uncomment the following line if you do not want to check your keystore files in.
 *.jks
-signed_jks_detail_pic.png
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild

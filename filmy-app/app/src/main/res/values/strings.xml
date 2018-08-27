@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Filmy</string>
+
+    <string name="press_again_to_exit">Press again to exit</string>
+    <string name="loading">loading</string>
+
+    <string name="label_production_company">Production Company</string>
+    <string name="label_original_title">Original title</string>
+    <string name="label_movie_status">Status</string>
+    <string name="label_facts">Facts</string>
+    <string name="label_movie_runtime">Runtime</string>
+    <string name="label_recommended">Recommended</string>
+    <string name="label_search">Search...</string>
+
+    <string name="err_something_went_wrong">Opps! Something went wrong. Please try again later.</string>
+    <string name="no_internet_connection">Please check your internet connection</string>
+
+</resources>
