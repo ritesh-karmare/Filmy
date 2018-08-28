@@ -5,7 +5,7 @@
 
 ![](/screenshots/filmy_banner.png)
 
-Filmy: The fastest, easiest way to find and discover movies on your device. Includes The Movie Database (TMDb) ratings and facts.
+Filmy: The fastest and easiest way to discover movies on your device. Includes The Movie Database (TMDb) ratings and facts.
 
 # Download
 
@@ -47,7 +47,7 @@ Filmy: The fastest, easiest way to find and discover movies on your device. Incl
 
 # Change Log
 
-**v1.0.0 - 27 August, 2018** <br>
+**v1.0.0 - 28 August, 2018** <br>
 * Categorized list of Now playing, Upcoming, Top Rated, Popular movies.*
 * Movie rating*
 * Movie details along with backdrop images(movie scenes)*
