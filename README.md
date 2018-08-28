@@ -9,7 +9,8 @@ Filmy: The fastest and easiest way to discover movies on your device. Includes T
 
 # Download
 
-[<img src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' alt='Get it on Google Play' width='210' heigh='80'>](https://play.google.com/store/apps/details?id=rk.entertainment.filmy)
+[<img src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' alt='Get it on Google Play' width='210' height='80'>](https://play.google.com/store/apps/details?id=rk.entertainment.filmy)
+
 
 <br>
 
@@ -65,7 +66,7 @@ Filmy: The fastest and easiest way to discover movies on your device. Includes T
 # Author
 
 Ritesh Karmare<br>
-ritesh.karmare@gmail.com
+[<img src='https://cdnjs.cloudflare.com/ajax/libs/webicons/2.0.0/webicons/webicon-linkedin.svg' alt='Get it on Google Play' width='32' height='32'>](https://www.linkedin.com/in/riteshkarmare/)<br>
 
 
 
