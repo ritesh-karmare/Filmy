@@ -1,6 +1,6 @@
 # Filmy 
 
-[![Version](https://img.shields.io/badge/version-v1.0.0-brightgreen.svg)](https://www.google.com)
+[![Version](https://img.shields.io/badge/version-v1.0.0-brightgreen.svg)](https://play.google.com/store/apps/details?id=rk.entertainment.filmy)
 [![License](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg)](https://raw.githubusercontent.com/ritesh-karmare/Test/master/LICENSE)
 
 ![](/screenshots/filmy_banner.png)
@@ -9,7 +9,7 @@ Filmy: The fastest, easiest way to find and discover movies on your device. Incl
 
 # Download
 
-[<img src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' alt='Get it on Google Play' width='210' heigh='80'>](https://play.google.com/store/apps/details?id=org.asdtm.fas)
+[<img src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' alt='Get it on Google Play' width='210' heigh='80'>](https://play.google.com/store/apps/details?id=rk.entertainment.filmy)
 
 <br>
 
