@@ -5,7 +5,9 @@
 
 ![](/screenshots/filmy_banner.png)
 
-Filmy: The fastest and easiest way to discover movies on your device. Includes The Movie Database (TMDb) ratings and facts.
+Filmy: The fastest and easiest way to discover movies on your device. All the movie data is retrieved using [The Movie Database (TMDb)][1] APIs
+
+[1]: http://slashdot.org
 
 # Download
 
