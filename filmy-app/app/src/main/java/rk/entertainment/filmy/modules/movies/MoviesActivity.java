@@ -19,9 +19,7 @@ import butterknife.ButterKnife;
 import rk.entertainment.filmy.R;
 import rk.entertainment.filmy.modules.search.SearchActivity;
 import rk.entertainment.filmy.utils.MovieModuleTypes;
-import rk.entertainment.filmy.utils.Utility;
 import rk.entertainment.filmy.utils.ViewPagerAdapter;
-import timber.log.Timber;
 
 public class MoviesActivity extends AppCompatActivity {
 
@@ -40,7 +38,7 @@ public class MoviesActivity extends AppCompatActivity {
     @BindView(R.id.iv_search)
     ImageView ivSearch;
 
-    String[] tabLabelArr;
+    private String[] tabLabelArr;
     private boolean _doubleBackToExitPressedOnce = false;
 
     @Override
@@ -48,15 +46,11 @@ public class MoviesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies_main);
         ButterKnife.bind(this);
-        try {
-            initToolbar();
-            initReferences();
-            setupViewPager(viewPager);
-            initTabs();
-            initListeners();
-        } catch (Exception e) {
-            Timber.e(Utility.getExceptionStrign(e));
-        }
+        initToolbar();
+        initReferences();
+        setupViewPager(viewPager);
+        initTabs();
+        initListeners();
     }
 
     private void initToolbar() {
@@ -74,7 +68,8 @@ public class MoviesActivity extends AppCompatActivity {
 
     private void initListeners() {
 
-        ivSearch.setOnClickListener(view -> startActivity(new Intent(MoviesActivity.this, SearchActivity.class)));
+        ivSearch.setOnClickListener(view ->
+                startActivity(new Intent(MoviesActivity.this, SearchActivity.class)));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -92,23 +87,23 @@ public class MoviesActivity extends AppCompatActivity {
         });
     }
 
+    // Setting up the viewPager with titles -> NowPLaying, Upcoming, TopRated, etc...
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
         adapter.addFragment(MoviesFragment.newInstance(MovieModuleTypes.NOW_PLAYING), tabLabelArr[0]);
         adapter.addFragment(MoviesFragment.newInstance(MovieModuleTypes.UPCOMING), tabLabelArr[1]);
         adapter.addFragment(MoviesFragment.newInstance(MovieModuleTypes.TOP_RATED), tabLabelArr[2]);
         adapter.addFragment(MoviesFragment.newInstance(MovieModuleTypes.POPULAR), tabLabelArr[3]);
-
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(adapter.getCount());
-
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    // Initialize tabs with selected/default state; tab and text color
     private void initTabs() {
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            AppCompatTextView tabOne = (AppCompatTextView) LayoutInflater.from(this).inflate(R.layout.custom_tab_layout, null);
+            AppCompatTextView tabOne = (AppCompatTextView) LayoutInflater.from(this)
+                    .inflate(R.layout.custom_tab_layout, null);
             tabOne.setText(tabLabelArr[i]);
             if (tabLayout.getSelectedTabPosition() == i) {
                 tabOne.setBackgroundResource(R.drawable.tab_selected_bg);
@@ -117,32 +112,26 @@ public class MoviesActivity extends AppCompatActivity {
                 tabOne.setBackgroundResource(R.drawable.tab_unselected_bg);
                 tabOne.setTextColor(getResources().getColor(R.color.light_gray));
             }
-
             TabLayout.Tab tab = tabLayout.getTabAt(i);
-            if (tab != null)
-                tab.setCustomView(tabOne);
+            if (tab != null) tab.setCustomView(tabOne);
         }
     }
 
+    // Update tabs with selected/default state; tab and text color on sliding pager
     private void updateTabs(TabLayout.Tab selectedTab) {
-        try {
-            for (int i = 0; i < tabLayout.getTabCount(); i++) {
-                TabLayout.Tab tab = tabLayout.getTabAt(i);
-
-                if (tab != null) {
-                    AppCompatTextView tv = (AppCompatTextView) tab.getCustomView();
-                    if (tv != null)
-                        if (tab.getPosition() == selectedTab.getPosition()) {
-                            tv.setBackgroundResource(R.drawable.tab_selected_bg);
-                            tv.setTextColor(getResources().getColor(android.R.color.white));
-                        } else {
-                            tv.setBackgroundResource(R.drawable.tab_unselected_bg);
-                            tv.setTextColor(getResources().getColor(R.color.light_gray));
-                        }
-                }
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                AppCompatTextView tv = (AppCompatTextView) tab.getCustomView();
+                if (tv != null)
+                    if (tab.getPosition() == selectedTab.getPosition()) {
+                        tv.setBackgroundResource(R.drawable.tab_selected_bg);
+                        tv.setTextColor(getResources().getColor(android.R.color.white));
+                    } else {
+                        tv.setBackgroundResource(R.drawable.tab_unselected_bg);
+                        tv.setTextColor(getResources().getColor(R.color.light_gray));
+                    }
             }
-        } catch (Exception e) {
-            Timber.e(Utility.getExceptionStrign(e));
         }
     }
 
@@ -152,11 +141,8 @@ public class MoviesActivity extends AppCompatActivity {
             super.onBackPressed();
             return;
         }
-
         this._doubleBackToExitPressedOnce = true;
         Toast.makeText(this, getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(() -> _doubleBackToExitPressedOnce = false, 1000);
     }
 }
-
-

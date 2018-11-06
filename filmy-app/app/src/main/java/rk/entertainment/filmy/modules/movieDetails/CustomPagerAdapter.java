@@ -20,8 +20,8 @@ import com.bumptech.glide.request.target.Target;
 import java.util.List;
 
 import rk.entertainment.filmy.R;
-import rk.entertainment.filmy.data.models.moviesDetails.BackdropData;
-import rk.entertainment.filmy.data.network.APIUtils;
+import rk.entertainment.filmy.models.moviesDetails.BackdropData;
+import rk.entertainment.filmy.network.APIUtils;
 import rk.entertainment.filmy.utils.GlideApp;
 
 public class CustomPagerAdapter extends PagerAdapter {
@@ -40,7 +40,6 @@ public class CustomPagerAdapter extends PagerAdapter {
         this.backdropDataList.addAll(backdropDataList);
         if (this.backdropDataList.size() == 0)
             this.backdropDataList.add(0, new BackdropData());
-
         notifyDataSetChanged();
     }
 
@@ -60,10 +59,9 @@ public class CustomPagerAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.pager_item, container, false);
         ImageView imageView = itemView.findViewById(R.id.iv_pager);
         BackdropData data = backdropDataList.get(position);
-
         if (data.getFilePath() != null) {
-            String backDropUrl = APIUtils.IMAGE_BASE_URL + APIUtils.BACKDROP_IMAGE_SIZE + backdropDataList.get(position).getFilePath();
-
+            String backDropUrl = APIUtils.IMAGE_BASE_URL
+                    + APIUtils.BACKDROP_IMAGE_SIZE + backdropDataList.get(position).getFilePath();
             GlideApp.with(mContext)
                     .asBitmap()
                     .load(backDropUrl)
@@ -87,9 +85,7 @@ public class CustomPagerAdapter extends PagerAdapter {
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             imageView.setImageResource(R.drawable.loading);
         }
-
         container.addView(itemView);
-
         return itemView;
     }
 

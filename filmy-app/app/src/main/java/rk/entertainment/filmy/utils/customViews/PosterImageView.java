@@ -12,7 +12,6 @@ public class PosterImageView extends AppCompatImageView {
 
     int phoneWidth;
     int phoneHeight;
-    DisplayMetrics displayMetrics;
 
     public PosterImageView(Context context) {
         super(context);
@@ -29,7 +28,6 @@ public class PosterImageView extends AppCompatImageView {
         getDisplayWidthHeight();
     }
 
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -37,12 +35,8 @@ public class PosterImageView extends AppCompatImageView {
         int viewWidth = MeasureSpec.getSize(widthMeasureSpec);
         float posterProportion = 1.5f;
 
-        if (getContext() instanceof MovieDetailsActivity) {
-
-
+        if (getContext() instanceof MovieDetailsActivity)
             viewWidth = (int) (phoneWidth * 0.25);
-        }
-
 
         int finalViewHeight = (int) (viewWidth * posterProportion);
         setMeasuredDimension(viewWidth, finalViewHeight);
@@ -56,7 +50,6 @@ public class PosterImageView extends AppCompatImageView {
 
         phoneWidth = displayMetrics.widthPixels;
         phoneHeight = displayMetrics.heightPixels;
-
     }
 
 }

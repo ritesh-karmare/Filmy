@@ -21,7 +21,7 @@ public class MoviesViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.tv_movie_rating)
     public TextView tv_movie_rating;
 
-    public MoviesViewHolder(View itemView) {
+    MoviesViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
