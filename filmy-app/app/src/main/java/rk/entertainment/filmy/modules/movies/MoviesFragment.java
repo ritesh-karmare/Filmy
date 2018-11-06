@@ -1,10 +1,10 @@
 package rk.entertainment.filmy.modules.movies;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,12 +19,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rk.entertainment.filmy.R;
-import rk.entertainment.filmy.data.models.movieList.MoviesListData;
+import rk.entertainment.filmy.models.movieList.MoviesListData;
+import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener;
+import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration;
 import rk.entertainment.filmy.utils.MovieModuleTypes;
-import rk.entertainment.filmy.utils.EndlessRecyclerViewOnScrollListener;
-import rk.entertainment.filmy.utils.GridSpacingItemDecoration;
-import rk.entertainment.filmy.utils.Utility;
-
+import rk.entertainment.filmy.utils.UIUtils;
 
 public class MoviesFragment extends Fragment implements MoviesContract.View {
 
@@ -34,16 +33,15 @@ public class MoviesFragment extends Fragment implements MoviesContract.View {
     @BindView(R.id.rv_upcoming_movies)
     RecyclerView recyclerView;
 
-    private MoviesAdapter adapter;
-    private MoviesPresenter presenter;
-
     private @MovieModuleTypes.MovieModule
     int movieModuleType = MovieModuleTypes.UPCOMING;
 
+    private MoviesAdapter adapter;
+    private MoviesPresenter presenter;
+    private GridLayoutManager mGridLayoutManager;
+    private EndlessRecyclerViewOnScrollListener endlessRecyclerViewOnScrollListener;
+    private Context context;
     private static final String ARG_KEY = "moviesModuleType";
-
-    GridLayoutManager mGridLayoutManager;
-    EndlessRecyclerViewOnScrollListener endlessRecyclerViewOnScrollListener;
 
     public static MoviesFragment newInstance(@MovieModuleTypes.MovieModule int movieModuleType) {
         MoviesFragment fragment = new MoviesFragment();
@@ -74,9 +72,10 @@ public class MoviesFragment extends Fragment implements MoviesContract.View {
     private void initReferences() {
         mGridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mGridLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Utility.dpToPx(8, getContext()), true));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2,
+                UIUtils.dpToPx(8, context), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new MoviesAdapter(getActivity());
+        adapter = new MoviesAdapter(context);
         recyclerView.setAdapter(adapter);
     }
 
@@ -86,13 +85,14 @@ public class MoviesFragment extends Fragment implements MoviesContract.View {
             getMovies(true);
         });
 
-        recyclerView.addOnScrollListener(endlessRecyclerViewOnScrollListener = new EndlessRecyclerViewOnScrollListener(mGridLayoutManager) {
-            @Override
-            public void onLoadMore() {
-                toggleListenerLoading(true);
-                getMovies(false);
-            }
-        });
+        recyclerView.addOnScrollListener(endlessRecyclerViewOnScrollListener =
+                new EndlessRecyclerViewOnScrollListener(mGridLayoutManager) {
+                    @Override
+                    public void onLoadMore() {
+                        toggleListenerLoading(true);
+                        getMovies(false);
+                    }
+                });
     }
 
     private void initPresenter() {
@@ -100,21 +100,18 @@ public class MoviesFragment extends Fragment implements MoviesContract.View {
         getMovies(false);
     }
 
-
+    // Trigger presenter for get the list of movies for specific MovieModuleType
     private void getMovies(boolean isRefreshed) {
-        if (Utility.isNetworkAvailable(getContext())) {
+        if (UIUtils.isNetworkAvailable(context)) {
             if (isRefreshed)
                 presenter.resetPage();
 
             swipeRefreshLayout.setRefreshing(true);
             presenter.getMoviesList(movieModuleType);
         } else
-            showSnackBar(getString(R.string.no_internet_connection));
+            UIUtils.displayMessage(context, true, getString(R.string.no_internet_connection)
+                    , swipeRefreshLayout, true);
     }
-
-     /*
-    Movies callbacks
-     */
 
     @Override
     public void displayMoviesList(List<MoviesListData> upcomingMoviesList) {
@@ -130,27 +127,39 @@ public class MoviesFragment extends Fragment implements MoviesContract.View {
         recyclerView.stopScroll();
     }
 
+    // Handle API error
     @Override
     public void errorMsg() {
         dismissRefreshing();
         toggleListenerLoading(false);
-        showSnackBar(getString(R.string.err_something_went_wrong));
+        UIUtils.displayMessage(context, true, getString(R.string.err_something_went_wrong)
+                , swipeRefreshLayout, true);
     }
 
+    // Load the adapter with movie list
     private void loadAdapter(List<MoviesListData> upcomingMoviesList) {
         adapter.addAll(upcomingMoviesList);
     }
 
+    // Dismiss swipe refresh
     void dismissRefreshing() {
         swipeRefreshLayout.setRefreshing(false);
     }
 
+    // Set the ScrollListener to true\false when end of recyclerview reached for loading more data
     private void toggleListenerLoading(boolean isLoading) {
         endlessRecyclerViewOnScrollListener.setLoading(isLoading);
     }
 
-    private void showSnackBar(String string) {
-        Snackbar.make(swipeRefreshLayout, string, Snackbar.LENGTH_LONG);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 
     @Override
@@ -158,5 +167,4 @@ public class MoviesFragment extends Fragment implements MoviesContract.View {
         super.onDestroy();
         presenter.unbind();
     }
-
 }

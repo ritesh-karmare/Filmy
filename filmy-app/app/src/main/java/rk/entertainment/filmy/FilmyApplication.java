@@ -15,10 +15,8 @@ public class FilmyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         initCrashlytics();
         initTimber();
-
     }
 
     private void initCrashlytics() {
@@ -41,5 +39,4 @@ public class FilmyApplication extends Application {
         else
             Timber.plant(new NotLoggingTImberTree());
     }
-
 }
