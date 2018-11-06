@@ -1,6 +1,6 @@
 # Filmy 
 
-[![Version](https://img.shields.io/badge/version-v1.0.0-brightgreen.svg)](https://play.google.com/store/apps/details?id=rk.entertainment.filmy)
+[![Version](https://img.shields.io/badge/version-v2.0.0-brightgreen.svg)](https://play.google.com/store/apps/details?id=rk.entertainment.filmy)
 [![License](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg)](https://raw.githubusercontent.com/ritesh-karmare/Test/master/LICENSE)
 
 ![](/screenshots/filmy_banner.png)
@@ -21,16 +21,16 @@ Filmy: The fastest and easiest way to discover movies on your device. All the mo
 * Movie rating
 * Movie details along with backdrop images(movie scenes)
 * Search for a movie
+* Watch trailers
 
 
 # Upcoming Features
 
-1. Trailers
-2. Get movie reviews
-3. Register/Login to TMDb
-4. Shortlist favorite movies
-5. Rate a Movie
-6. Give reviews
+1. Get movie reviews
+2. Register/Login to TMDb
+3. Shortlist favorite movies
+4. Rate a Movie
+5. Give reviews
 
 
 # Goal
@@ -45,11 +45,14 @@ Filmy: The fastest and easiest way to discover movies on your device. All the mo
 
 # Change Log
 
+**v2.0.0 - 06 November, 2018** <br>
+* Now you can watch 'trailers'
+
 **v1.0.0 - 28 August, 2018** <br>
-* Categorized list of Now playing, Upcoming, Top Rated, Popular movies.*
-* Movie rating*
-* Movie details along with backdrop images(movie scenes)*
-* Search for a movie*
+* Categorized list of Now playing, Upcoming, Top Rated, Popular movies.
+* Movie rating
+* Movie details along with backdrop images(movie scenes)
+* Search for a movie
 
 
 
