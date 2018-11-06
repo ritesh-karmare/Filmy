@@ -70,13 +70,15 @@
                             android:id="@+id/tv_movie_details_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/spacing_8dp"
+                            android:layout_marginEnd="@dimen/spacing_8dp"
                             android:layout_toLeftOf="@+id/linlay_details"
                             android:fontFamily="sans-serif"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/text_size_18sp"
                             android:textStyle="normal"
-                            tools:text="Rocky" />
+                            tools:text="Rocky"
+                            android:layout_toStartOf="@+id/linlay_details"
+                            android:layout_marginRight="@dimen/spacing_8dp" />
 
 
                         <LinearLayout
@@ -161,8 +163,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/spacing_16dp"
-                android:layout_marginRight="@dimen/spacing_16dp"
                 android:layout_marginTop="@dimen/spacing_8dp"
+                android:layout_marginRight="@dimen/spacing_16dp"
                 android:fontFamily="sans-serif-light"
                 android:lineSpacingExtra="@dimen/spacing_3dp"
                 android:textColor="@android:color/white"
@@ -176,10 +178,10 @@
                 android:layout_marginTop="@dimen/spacing_16dp"
                 android:background="@color/colorPrimary"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/spacing_16dp"
                 android:paddingLeft="@dimen/spacing_16dp"
+                android:paddingTop="@dimen/spacing_16dp"
                 android:paddingRight="@dimen/spacing_16dp"
-                android:paddingTop="@dimen/spacing_16dp">
+                android:paddingBottom="@dimen/spacing_16dp">
 
                 <TextView
                     android:id="@+id/tv_movie_details_org_factstxt"
@@ -304,14 +306,36 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_movie_details_videos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryLight"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="@dimen/spacing_16dp"
+                android:paddingTop="@dimen/spacing_8dp"
+                android:paddingRight="@dimen/spacing_16dp"
+                android:text="@string/label_videos"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_18sp"
+                android:textStyle="normal" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_videos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryLight"
+                android:paddingTop="@dimen/spacing_8dp"
+                android:paddingBottom="@dimen/spacing_8dp" />
+
+            <TextView
                 android:id="@+id/tv_movie_details_prod_recommendedtxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryLight"
                 android:fontFamily="sans-serif"
                 android:paddingLeft="@dimen/spacing_16dp"
-                android:paddingRight="@dimen/spacing_16dp"
                 android:paddingTop="@dimen/spacing_8dp"
+                android:paddingRight="@dimen/spacing_16dp"
                 android:text="@string/label_recommended"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/text_size_18sp"
@@ -322,14 +346,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryLight"
-                android:paddingBottom="@dimen/spacing_8dp"
-                android:paddingTop="@dimen/spacing_8dp" />
+                android:paddingTop="@dimen/spacing_8dp"
+                android:paddingBottom="@dimen/spacing_8dp" />
 
         </LinearLayout>
 
-        <!-- Main content goes here. -->
-
     </android.support.v4.widget.NestedScrollView>
-
 
 </android.support.design.widget.CoordinatorLayout>

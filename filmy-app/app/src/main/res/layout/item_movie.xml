@@ -15,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-
         <rk.entertainment.filmy.utils.customViews.PosterImageView
             android:id="@+id/iv_movie_poster"
             android:layout_width="match_parent"
@@ -24,32 +23,22 @@
             android:foreground="@drawable/gradient_overlay"
             android:src="@drawable/loading" />
 
-        <LinearLayout
+
+        <TextView
+            android:id="@+id/tv_movie_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|left"
+            android:layout_gravity="bottom|start"
             android:layout_margin="@dimen/spacing_4dp"
+            android:drawableStart="@drawable/ic_star"
+            android:drawableLeft="@drawable/ic_star"
+            android:drawablePadding="@dimen/spacing_2dp"
+            android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:textColor="@android:color/white"
+            android:textStyle="normal"
+            tools:text="2.5" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="@dimen/spacing_20dp"
-                android:layout_height="@dimen/spacing_20dp"
-                android:padding="@dimen/spacing_2dp"
-                android:src="@drawable/ic_star"
-                android:tint="@color/colorAccent" />
-
-            <TextView
-                android:id="@+id/tv_movie_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/spacing_2dp"
-                android:fontFamily="sans-serif-medium"
-                tools:text="2.5"
-                android:textColor="@android:color/white"
-                android:textStyle="normal" />
-
-        </LinearLayout>
 
     </FrameLayout>
 </android.support.v7.widget.CardView>

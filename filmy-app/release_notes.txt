@@ -1,0 +1,10 @@
+v2.0.0 1st Nov'18
+------------------
+Updated version from 1.0.0 - 2.0.0-dev
+Updated glide version from 4.6.1 to 4.7.1
+Updated constraint layout from 1.1.2 to 1.1.3
+Updated fabric tool from 1.25.1 to 1.26.1
+Integrated Firebase Analytics, Performance monitoring
+
+Feature(s):
+View Trailer in-app
