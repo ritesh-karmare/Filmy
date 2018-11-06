@@ -17,7 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 public final class MyGlideModule extends AppGlideModule {
     @Override
     public void applyOptions(@NonNull Context context, GlideBuilder builder) {
-        builder.setDefaultRequestOptions(new RequestOptions().format(DecodeFormat.PREFER_ARGB_8888));
+        builder.setDefaultRequestOptions(new RequestOptions().format(DecodeFormat.PREFER_RGB_565));
         builder.setLogLevel(Log.ERROR);
     }
 

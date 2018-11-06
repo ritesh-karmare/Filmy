@@ -5,23 +5,22 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import rk.entertainment.filmy.data.models.movieList.MoviesListResponse;
-import rk.entertainment.filmy.data.network.APIClient;
-import rk.entertainment.filmy.data.network.APIService;
-import rk.entertainment.filmy.data.network.APIUtils;
+import rk.entertainment.filmy.models.movieList.MoviesListResponse;
+import rk.entertainment.filmy.network.APIClient;
+import rk.entertainment.filmy.network.APIService;
+import rk.entertainment.filmy.network.APIUtils;
 import timber.log.Timber;
 
 public class SearchMoviesPresenter implements SearchContract.Presenter {
 
     private SearchContract.View viewCallback;
     private CompositeDisposable mCompositeDisposable;
-
     private int page;
     private int totalPages;
     private String query;
 
 
-    public SearchMoviesPresenter(SearchContract.View viewCallback) {
+    SearchMoviesPresenter(SearchContract.View viewCallback) {
         this.viewCallback = viewCallback;
         mCompositeDisposable = new CompositeDisposable();
         page = 0;
@@ -42,31 +41,10 @@ public class SearchMoviesPresenter implements SearchContract.Presenter {
 
 
     private void getResult(boolean resetPage) {
-
-        if (resetPage)
-            resetPage();
+        if (resetPage) resetPage();
 
         handlePageOffset(true);
-
         APIService apiImpl = APIClient.getClient().create(APIService.class);
-
-   /*     // Subject holding the most recent user input
-        BehaviorSubject<String> userInputSubject = BehaviorSubject.create();
-        userInputSubject.onNext(query);
-
-// Subscription to monitor changes to user input, calling API at most every
-// two seconds. (Remember to unsubscribe this subscription!)
-        Disposable observable = userInputSubject
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .filter(charSequence -> !charSequence.isEmpty())
-                .distinctUntilChanged()
-                .flatMap(input -> apiImpl.getSearchedMovies(APIUtils.API_KEY, input, false, page))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError);
-
-        mCompositeDisposable.add(observable);*/
-
         mCompositeDisposable.add(apiImpl.getSearchedMovies(APIUtils.API_KEY, query, false, page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .distinctUntilChanged()
@@ -76,40 +54,26 @@ public class SearchMoviesPresenter implements SearchContract.Presenter {
     }
 
     private void handleResponse(MoviesListResponse moviesListResponse) {
-
-        if (viewCallback == null)
-            return;
-
+        if (viewCallback == null) return;
         if (moviesListResponse != null) {
             totalPages = moviesListResponse.getTotalPages();
             if (moviesListResponse.getResults() != null && moviesListResponse.getResults().size() > 0)
-                if (page == 1)
-                    viewCallback.displayMoviesList(moviesListResponse.getResults());
-                else
-                    viewCallback.displayMoreMoviesList(moviesListResponse.getResults());
+                if (page == 1) viewCallback.displayMoviesList(moviesListResponse.getResults());
+                else viewCallback.displayMoreMoviesList(moviesListResponse.getResults());
         }
     }
 
     private void handleError(Throwable throwable) {
-        try {
-            Timber.e(throwable);
-            handlePageOffset(false);
-            if (viewCallback == null)
-                return;
-            viewCallback.errorMsg();
-        } catch (Exception e) {
-            Timber.e(e);
-        }
+        Timber.e(throwable);
+        handlePageOffset(false);
+        if (viewCallback == null) return;
+        viewCallback.errorMsg();
     }
 
     private void handlePageOffset(boolean increment) {
         if (increment) {
-            if (page < totalPages)
-                page = page + 1;
-        } else {
-            if (page > 1)
-                page = page - 1;
-        }
+            if (page < totalPages) page = page + 1;
+        } else if (page > 1) page = page - 1;
     }
 
     @Override

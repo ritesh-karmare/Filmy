@@ -1,11 +1,10 @@
 package rk.entertainment.filmy.modules.movieDetails;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,14 +22,17 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rk.entertainment.filmy.R;
-import rk.entertainment.filmy.data.models.movieList.MoviesListData;
-import rk.entertainment.filmy.data.models.moviesDetails.BackdropData;
-import rk.entertainment.filmy.data.models.moviesDetails.GenreData;
-import rk.entertainment.filmy.data.models.moviesDetails.MovieDetailsRes;
-import rk.entertainment.filmy.data.models.moviesDetails.ProductionCompanyData;
+import rk.entertainment.filmy.models.movieList.MoviesListData;
+import rk.entertainment.filmy.models.moviesDetails.BackdropData;
+import rk.entertainment.filmy.models.moviesDetails.GenreData;
+import rk.entertainment.filmy.models.moviesDetails.MovieDetailsRes;
+import rk.entertainment.filmy.models.moviesDetails.ProductionCompanyData;
+import rk.entertainment.filmy.models.moviesDetails.VideosData;
 import rk.entertainment.filmy.modules.movies.MoviesAdapter;
+import rk.entertainment.filmy.utils.DateTimeUtil;
+import rk.entertainment.filmy.utils.UIUtils;
 import rk.entertainment.filmy.utils.Utility;
-import rk.entertainment.filmy.utils.VerticalItemDecoration;
+import rk.entertainment.filmy.utils.rvUtils.VerticalItemDecoration;
 import timber.log.Timber;
 
 public class MovieDetailsActivity extends AppCompatActivity implements MovieDetailsContract.View, AppBarLayout.OnOffsetChangedListener {
@@ -80,6 +82,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
     @BindView(R.id.tv_movie_details_prod_companies)
     TextView tvProductionCompanies;
 
+    @BindView(R.id.tv_movie_details_videos)
+    TextView tvVideoText;
+
+    @BindView(R.id.rv_videos)
+    RecyclerView rvVideos;
+
     @BindView(R.id.tv_movie_details_prod_recommendedtxt)
     TextView tvRecommendedText;
 
@@ -87,15 +95,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
     RecyclerView rvRecommended;
 
     // appbar scroll range
-    int scrollRange = -1;
-    boolean isShowTitle = true;
+    private int scrollRange = -1;
+    private boolean isShowTitle = true;
+    private String title;
+    private int movieId;
 
-    MovieDetailsContract.Presenter movieDetailsPresenter;
-    CustomPagerAdapter customPagerAdapter;
-
-    String title;
-    int movieId;
-
+    private MovieDetailsContract.Presenter movieDetailsPresenter;
+    private CustomPagerAdapter customPagerAdapter;
     private LinearLayout.LayoutParams imageParam;
     private List<ImageView> indicators;
 
@@ -105,14 +111,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_movie_details);
             ButterKnife.bind(this);
-
             initToolbar();
             initReferences();
             initListeners();
             initPresenter();
             getMovieDetails();
         } catch (Exception e) {
-            Timber.e(Utility.getExceptionStrign(e));
+            Timber.e(Utility.getExceptionString(e));
         }
     }
 
@@ -143,7 +148,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
     }
@@ -152,98 +156,29 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
         movieDetailsPresenter = new MovieDetailsPresenter(this, movieId);
     }
 
+    // Trigger presenter to get the movie details
     private void getMovieDetails() {
-        if (Utility.isNetworkAvailable(this))
+        if (UIUtils.isNetworkAvailable(this))
             movieDetailsPresenter.movieDetails();
         else
-            showSnackBar(getString(R.string.no_internet_connection));
+            UIUtils.displayMessage(this, true,
+                    getString(R.string.no_internet_connection), clMovieDetails, true);
     }
 
-    @Override
-    public void movieDetails(MovieDetailsRes movieData) {
-        setUpMovieHeader(movieData.getImages().getBackdrops(), movieData.getTitle(), movieData.getGenres(), movieData.getReleaseDate(), movieData.getVoteAverage().toString(), movieData.getRuntime());
-        setUpOverView(movieData.getOverview());
-        setUpMovieFacts(movieData.getOriginalTitle(), movieData.getStatus(), movieData.getProductionCompanies());
-        initRecommendedMovies(movieData.getRecommendations().getResults());
-    }
-
-    private void setUpMovieHeader(List<BackdropData> backdrops, String title, List<GenreData> genres, String releaseDate, String rating, int runtime) {
-
-        customPagerAdapter.addAll(backdrops);
-        initDots();
-        addDots(backdrops.size());
-
-        String genre = Utility.getAppendedStringFromList(genres);
-        String releaseYear = Utility.getYearFromDate(releaseDate);
-        this.title = title;
-
-        tvMovieName.setText(title);
-        tvMovieYear.setText(releaseYear);
-        tvMovieRating.setText(rating);
-
-        if (genre != null) {
-            tvMovieGenre.setVisibility(View.VISIBLE);
-            tvMovieGenre.setText(genre);
-        } else
-            tvMovieGenre.setVisibility(View.GONE);
-
-        tv_movie_details_runtime.setText(Utility.getHoursAndMinutes(runtime));
-
-        app_bar.addOnOffsetChangedListener(this);
-    }
-
-    private void setUpOverView(String overview) {
-        tvMovieOverview.setText(overview);
-    }
-
-    private void setUpMovieFacts(String originalTitle, String status, List<ProductionCompanyData> productionCompanies) {
-        tvMovieOriginalTitle.setText(originalTitle);
-        tvMovieStatus.setText(status);
-        tvProductionCompanies.setText(Utility.getAppendedStringFromList(productionCompanies));
-    }
-
-    private void initRecommendedMovies(List<MoviesListData> recommendationsList) {
-
-        if (recommendationsList.size() > 0) {
-
-            ViewCompat.setNestedScrollingEnabled(rvRecommended, false);
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-            mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
-            rvRecommended.setLayoutManager(mLayoutManager);
-            rvRecommended.addItemDecoration(new VerticalItemDecoration(this));
-
-
-            MoviesAdapter moviesAdapter = new MoviesAdapter(this);
-            moviesAdapter.addAll(recommendationsList);
-            rvRecommended.setAdapter(moviesAdapter);
-        } else {
-            tvRecommendedText.setVisibility(View.GONE);
-            rvRecommended.setVisibility(View.GONE);
-        }
-
-
-    }
-
-    @Override
-    public void errorMsg() {
-        showSnackBar(getString(R.string.err_something_went_wrong));
-    }
-
+    // Init the dots for viewPager
     private void initDots() {
         //init params
-        int marginLeftRight = Utility.dpToPx(2, this);
-        int marginTopBottom = Utility.dpToPx(8, this);
-        int width = Utility.dpToPx(6, this);
+        int marginLeftRight = UIUtils.dpToPx(2, this);
+        int marginTopBottom = UIUtils.dpToPx(8, this);
+        int width = UIUtils.dpToPx(6, this);
         imageParam = new LinearLayout.LayoutParams(width, width);
         imageParam.setMargins(marginLeftRight, marginTopBottom, marginLeftRight, marginTopBottom);
-
         indicators = new ArrayList<>();
     }
 
+    // Add the dots for viewPager based on image count
     private void addDots(int dotCount) {
         for (int indicatorCount = 0; indicatorCount < dotCount; indicatorCount++) {
-
             ImageView imageIndicator = new ImageView(this);
             imageIndicator.setAdjustViewBounds(true);
             imageIndicator.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -257,13 +192,120 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
             indicators.get(0).setBackgroundResource(R.drawable.indicator_selected);
     }
 
+    // Update the indicator to selected/default state on scroll of viewPager
     private void updateIndicators(int selectedPostion) {
         for (int indicatorPosition = 0; indicatorPosition < indicators.size(); indicatorPosition++) {
-            indicators.get(indicatorPosition).setBackgroundResource(indicatorPosition == selectedPostion ? R.drawable.indicator_selected
-                    : R.drawable.indicator_default);
+            indicators.get(indicatorPosition).setBackgroundResource(
+                    indicatorPosition == selectedPostion ? R.drawable.indicator_selected
+                            : R.drawable.indicator_default);
         }
     }
 
+    // Movie details main response method
+    @Override
+    public void movieDetails(MovieDetailsRes movieData) {
+        setUpMovieHeader(movieData.getImages().getBackdrops(), movieData.getTitle(),
+                movieData.getGenres(), movieData.getReleaseDate(),
+                movieData.getVoteAverage().toString(), movieData.getRuntime());
+
+        setUpOverView(movieData.getOverview());
+
+        setUpMovieFacts(movieData.getOriginalTitle(), movieData.getStatus(),
+                movieData.getProductionCompanies());
+
+        initVideos(movieData.getVideos().getResults());
+
+        initRecommendedMovies(movieData.getRecommendations().getResults());
+    }
+
+    // Set Images, title, genre, releaseDate, VoteAverage, Runtime
+    private void setUpMovieHeader(List<BackdropData> backdrops, String title, List<GenreData> genres,
+                                  String releaseDate, String rating, int runtime) {
+
+        customPagerAdapter.addAll(backdrops);
+        initDots();
+        addDots(backdrops.size());
+
+        String genre = Utility.getAppendedStringFromList(genres);
+        String releaseYear = DateTimeUtil.getYearFromDate(releaseDate);
+        this.title = title;
+
+        tvMovieName.setText(title);
+        tvMovieYear.setText(releaseYear);
+        tvMovieRating.setText(rating);
+
+        if (genre != null) {
+            tvMovieGenre.setVisibility(View.VISIBLE);
+            tvMovieGenre.setText(genre);
+        } else
+            tvMovieGenre.setVisibility(View.GONE);
+
+        tv_movie_details_runtime.setText(DateTimeUtil.getHoursAndMinutes(runtime));
+
+        app_bar.addOnOffsetChangedListener(this);
+
+        tvMovieName.setOnClickListener(view -> startActivity
+                (new Intent(MovieDetailsActivity.this, TrailerActivity.class)));
+
+    }
+
+    //  Set Overview (description)
+    private void setUpOverView(String overview) {
+        tvMovieOverview.setText(overview);
+    }
+
+    // Set original title, status, production companies
+    private void setUpMovieFacts(String originalTitle, String status,
+                                 List<ProductionCompanyData> productionCompanies) {
+        tvMovieOriginalTitle.setText(originalTitle);
+        tvMovieStatus.setText(status);
+        tvProductionCompanies.setText(Utility.getAppendedStringFromList(productionCompanies));
+    }
+
+    // Set videos thumbnail in the horizontal recyclerView
+    private void initVideos(List<VideosData> videosList) {
+        if (videosList.size() > 0) {
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+            mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+            rvVideos.setLayoutManager(mLayoutManager);
+            rvVideos.addItemDecoration(new VerticalItemDecoration(this));
+
+            VideosAdapter videosAdapter = new VideosAdapter(this);
+            videosAdapter.addAll(videosList);
+            rvVideos.setAdapter(videosAdapter);
+        } else {
+            tvVideoText.setVisibility(View.GONE);
+            rvVideos.setVisibility(View.GONE);
+        }
+    }
+
+    // Set recommended movies in the horizontal recyclerView
+    private void initRecommendedMovies(List<MoviesListData> recommendationsList) {
+        if (recommendationsList.size() > 0) {
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+            mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+            rvRecommended.setLayoutManager(mLayoutManager);
+            rvRecommended.addItemDecoration(new VerticalItemDecoration(this));
+
+            MoviesAdapter moviesAdapter = new MoviesAdapter(this);
+            moviesAdapter.addAll(recommendationsList);
+            rvRecommended.setAdapter(moviesAdapter);
+        } else {
+            tvRecommendedText.setVisibility(View.GONE);
+            rvRecommended.setVisibility(View.GONE);
+        }
+    }
+
+    // Handle API error
+    @Override
+    public void errorMsg() {
+        UIUtils.displayMessage(this, true,
+                getString(R.string.err_something_went_wrong), clMovieDetails, true);
+    }
+
+    // Handle the collapsible toolbar title
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         if (scrollRange == -1)
@@ -278,15 +320,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
         }
     }
 
-    private void showSnackBar(String message) {
-        Snackbar.make(clMovieDetails, message, Snackbar.LENGTH_LONG).show();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-
             case android.R.id.home:
                 onBackPressed();
                 break;
