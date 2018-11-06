@@ -46,6 +46,9 @@
 |  6. **ButterKnife**	   |  View binding framework. No more findViewById! <br>resulting in lesser code and lesser development time</br>  |
 |  7. **Timber**		     |  Logging library, an abstraction over android's logging interface, <br>provides feature of enabling and                                  </br>disabling logs for development and release builds respectively.  |
 |  8. **Crashlytics**    |  Track the crashes app-wide  |
+|  9. **Firebase Analytics**    |  Track the analytics of the app usage and behaviour  |
+|  10. **Firebase Performance**    |  Track app performance  |
+|  11. **Youtube Data v3**    |  To play youtube videos  |
 
 
 # UI Components
