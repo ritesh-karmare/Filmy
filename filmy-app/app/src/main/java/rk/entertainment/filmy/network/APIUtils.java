@@ -28,7 +28,7 @@ public class APIUtils {
     public final static String POSTER_IMAGE_SIZE = "w342";
 
     // "w300", "w780", "w1280", "original"
-    public final static String BACKDROP_IMAGE_SIZE = "original";
+    public final static String BACKDROP_IMAGE_SIZE = "w780";
 
     //  "w45", "w185", "h632", "original"
     //Profile size images

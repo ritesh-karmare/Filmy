@@ -7,7 +7,6 @@ import rk.entertainment.filmy.models.moviesDetails.MovieDetailsRes;
 import rk.entertainment.filmy.network.APIClient;
 import rk.entertainment.filmy.network.APIService;
 import rk.entertainment.filmy.network.APIUtils;
-import timber.log.Timber;
 
 public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
 
@@ -38,7 +37,7 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
     }
 
     private void handleError(Throwable throwable) {
-        Timber.e(throwable);
+
         if (viewCallback == null) return;
         viewCallback.errorMsg();
     }

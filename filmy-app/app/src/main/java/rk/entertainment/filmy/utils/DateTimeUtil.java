@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import timber.log.Timber;
-
 public class DateTimeUtil {
 
     // The date should be of format yyyy-MM-dd
@@ -21,7 +19,7 @@ public class DateTimeUtil {
             myDate.setTime(theDate);
             return String.valueOf(myDate.get(Calendar.YEAR));
         } catch (ParseException e) {
-            Timber.e(Utility.getExceptionString(e));
+e.printStackTrace();
             return releaseDate;
         }
     }

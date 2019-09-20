@@ -1,18 +1,19 @@
 package rk.entertainment.filmy.modules.search;
 
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,10 +25,9 @@ import io.reactivex.subjects.BehaviorSubject;
 import rk.entertainment.filmy.R;
 import rk.entertainment.filmy.models.movieList.MoviesListData;
 import rk.entertainment.filmy.modules.movies.MoviesAdapter;
+import rk.entertainment.filmy.utils.UIUtils;
 import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener;
 import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration;
-import rk.entertainment.filmy.utils.UIUtils;
-import timber.log.Timber;
 
 public class SearchActivity extends AppCompatActivity implements SearchContract.View, TextWatcher, View.OnTouchListener {
 
@@ -176,7 +176,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        Timber.i("OnTextChanged : %s", charSequence.toString());
         // this will trigger the call to rxFilter observer
         publishSubject.onNext(charSequence.toString());
     }

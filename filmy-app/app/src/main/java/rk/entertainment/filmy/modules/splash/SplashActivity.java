@@ -3,7 +3,7 @@ package rk.entertainment.filmy.modules.splash;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import rk.entertainment.filmy.R;
 import rk.entertainment.filmy.modules.movies.MoviesActivity;

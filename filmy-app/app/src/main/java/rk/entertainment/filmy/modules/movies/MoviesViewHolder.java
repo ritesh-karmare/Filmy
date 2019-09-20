@@ -1,9 +1,11 @@
 package rk.entertainment.filmy.modules.movies;
 
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.android.material.card.MaterialCardView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -13,7 +15,7 @@ import rk.entertainment.filmy.utils.customViews.PosterImageView;
 public class MoviesViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.cv_item_movie)
-    public CardView cv_item_movie;
+    public MaterialCardView cv_item_movie;
 
     @BindView(R.id.iv_movie_poster)
     public PosterImageView iv_movie_poster;

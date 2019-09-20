@@ -9,7 +9,6 @@ import rk.entertainment.filmy.models.movieList.MoviesListResponse;
 import rk.entertainment.filmy.network.APIClient;
 import rk.entertainment.filmy.network.APIService;
 import rk.entertainment.filmy.network.APIUtils;
-import timber.log.Timber;
 
 public class SearchMoviesPresenter implements SearchContract.Presenter {
 
@@ -64,7 +63,7 @@ public class SearchMoviesPresenter implements SearchContract.Presenter {
     }
 
     private void handleError(Throwable throwable) {
-        Timber.e(throwable);
+
         handlePageOffset(false);
         if (viewCallback == null) return;
         viewCallback.errorMsg();

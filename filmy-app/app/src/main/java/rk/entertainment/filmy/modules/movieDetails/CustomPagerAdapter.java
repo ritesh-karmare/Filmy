@@ -2,9 +2,11 @@ package rk.entertainment.filmy.modules.movieDetails;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.PagerAdapter;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.PagerAdapter;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +64,9 @@ public class CustomPagerAdapter extends PagerAdapter {
         if (data.getFilePath() != null) {
             String backDropUrl = APIUtils.IMAGE_BASE_URL
                     + APIUtils.BACKDROP_IMAGE_SIZE + backdropDataList.get(position).getFilePath();
+
+            Log.i("CustomPagerAdapter ", "instantiateItem backDrop "+backDropUrl);
+
             GlideApp.with(mContext)
                     .asBitmap()
                     .load(backDropUrl)
@@ -70,6 +75,7 @@ public class CustomPagerAdapter extends PagerAdapter {
                     .listener(new RequestListener<Bitmap>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+
                             return false;
                         }
 

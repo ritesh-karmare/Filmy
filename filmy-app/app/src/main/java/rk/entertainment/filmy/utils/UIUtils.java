@@ -3,7 +3,7 @@ package rk.entertainment.filmy.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.design.widget.Snackbar;
+import com.google.android.material.snackbar.Snackbar;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;

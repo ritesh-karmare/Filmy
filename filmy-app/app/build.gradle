@@ -1,20 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
-
-ext.versionMajor = 2
+ext.versionMajor = 3
 ext.versionMinor = 0
 ext.versionPatch = 0
 ext.versionClassifier = "dev"
 ext.isDevelopment = false
 ext.minimumSdkVersion = 16
-ext.targetSdkVersion = 27
+ext.targetSdkVersion = 28
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     buildToolsVersion '28.0.3'
 
     defaultConfig {
@@ -23,12 +19,11 @@ android {
         targetSdkVersion project.ext.targetSdkVersion
         versionCode generateVersionCode()
         versionName generateVersionName()
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
         debug {
-            ext.enableCrashlytics = false
             buildConfigField 'String', "API_KEY", Filmy_ApiKey
             buildConfigField 'String', "YOUTUBE_API_KEY", Filmy_Youtube_ApiKey
 
@@ -50,38 +45,32 @@ android {
 
 ext {
 
-    SUPPORT_LIBRARY_VERSION = '27.1.1'
+    SUPPORT_LIBRARY_VERSION = '28.0.0'
     SUPPORT_CONSTRAINT_LAYOUT = "1.1.3"
 
-    OKHTTP_VERSION = '3.11.0'
-    RETROFIT_VERSION = '2.4.0'
+    OKHTTP_VERSION = '4.2.0'
+    RETROFIT_VERSION = '2.6.1'
     GSON_VERSION = '2.8.5'
 
-    FIREBASE_PERFORMANCE_MONITORING = '16.2.0'
-    FIREBASE_ANALYTICS = '16.0.4'
+    FIREBASE_PERFORMANCE_MONITORING = '19.0.0'
+    FIREBASE_ANALYTICS = '17.2.0'
 
     RX_JAVA_VERSION = '2.2.0'
-    RX_ANDROID_VERSION = '2.0.2'
+    RX_ANDROID_VERSION = '2.1.1'
 
-    TIMBER_VERSION = '4.7.1'
+    BUTTERKNIFE_VERSION = '10.1.0'
+    GLIDE_VERSION = '4.9.0'
 
-    BUTTERKNIFE_VERSION = '8.8.1'
-    GLIDE_VERSION = '4.7.1'
-
-    JUNIT_VERSION = '4.12'
-    RUNNER_VERSION = '1.0.2'
-    ESPRESSO_VERSION = '3.0.2'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Support dependencies
-    implementation "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
-    implementation "com.android.support:cardview-v7:$SUPPORT_LIBRARY_VERSION"
-    implementation "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
-    implementation "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
-    implementation "com.android.support.constraint:constraint-layout:$SUPPORT_CONSTRAINT_LAYOUT"
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     // OkHttp, Retrofit and Gson networking libraries
     implementation "com.squareup.okhttp3:okhttp:$OKHTTP_VERSION"
@@ -103,29 +92,15 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$RETROFIT_VERSION"
     implementation "io.reactivex.rxjava2:rxandroid:$RX_ANDROID_VERSION"
 
-    // Timber
-    implementation "com.jakewharton.timber:timber:$TIMBER_VERSION"
-
     // Firebase
     implementation "com.google.firebase:firebase-perf:$FIREBASE_PERFORMANCE_MONITORING"
     implementation "com.google.firebase:firebase-core:$FIREBASE_ANALYTICS"
 
-    // Crashlytics
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
-        transitive = true
-    }
-
     // Youtube Player
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
 
-    // Local Unit tests
-    testImplementation "junit:junit:$JUNIT_VERSION"
-
-    // Espresso Unit testing
-    androidTestImplementation "com.android.support.test:runner:$RUNNER_VERSION"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$ESPRESSO_VERSION", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 }
 
 apply plugin: 'com.google.firebase.firebase-perf'

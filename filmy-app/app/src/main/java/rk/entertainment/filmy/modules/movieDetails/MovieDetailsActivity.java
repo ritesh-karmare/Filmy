@@ -2,19 +2,21 @@ package rk.entertainment.filmy.modules.movieDetails;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +31,11 @@ import rk.entertainment.filmy.models.moviesDetails.MovieDetailsRes;
 import rk.entertainment.filmy.models.moviesDetails.ProductionCompanyData;
 import rk.entertainment.filmy.models.moviesDetails.VideosData;
 import rk.entertainment.filmy.modules.movies.MoviesAdapter;
+import rk.entertainment.filmy.utils.AppLog;
 import rk.entertainment.filmy.utils.DateTimeUtil;
 import rk.entertainment.filmy.utils.UIUtils;
 import rk.entertainment.filmy.utils.Utility;
 import rk.entertainment.filmy.utils.rvUtils.VerticalItemDecoration;
-import timber.log.Timber;
 
 public class MovieDetailsActivity extends AppCompatActivity implements MovieDetailsContract.View, AppBarLayout.OnOffsetChangedListener {
 
@@ -117,7 +119,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
             initPresenter();
             getMovieDetails();
         } catch (Exception e) {
-            Timber.e(Utility.getExceptionString(e));
+            AppLog.e(e);
         }
     }
 

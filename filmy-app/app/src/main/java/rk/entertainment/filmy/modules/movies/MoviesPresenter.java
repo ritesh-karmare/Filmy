@@ -7,8 +7,8 @@ import rk.entertainment.filmy.models.movieList.MoviesListResponse;
 import rk.entertainment.filmy.network.APIClient;
 import rk.entertainment.filmy.network.APIService;
 import rk.entertainment.filmy.network.APIUtils;
+import rk.entertainment.filmy.utils.AppLog;
 import rk.entertainment.filmy.utils.MovieModuleTypes;
-import timber.log.Timber;
 
 import static rk.entertainment.filmy.utils.MovieModuleTypes.NOW_PLAYING;
 import static rk.entertainment.filmy.utils.MovieModuleTypes.POPULAR;
@@ -77,7 +77,7 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     // handle error response
     private void handleError(Throwable throwable) {
-            Timber.e(throwable);
+        AppLog.e(throwable);
             handlePageOffset(false);
             if (viewCallback == null) return;
             viewCallback.errorMsg();
