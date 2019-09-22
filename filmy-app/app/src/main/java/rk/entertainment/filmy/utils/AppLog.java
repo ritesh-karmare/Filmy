@@ -16,6 +16,7 @@ public class AppLog {
     }
 
     public static void w(Exception exception) {
+        if (exception == null) return;
         if (BuildConfig.DEBUG)
             exception.printStackTrace();
         else
@@ -23,6 +24,7 @@ public class AppLog {
     }
 
     public static void e(Exception message) {
+        if (message == null) return;
         if (BuildConfig.DEBUG)
             message.printStackTrace();
         else
@@ -30,6 +32,7 @@ public class AppLog {
     }
 
     public static void e(Throwable throwable) {
+        if (throwable == null) return;
         if (BuildConfig.DEBUG)
             Log.getStackTraceString(throwable);
         else

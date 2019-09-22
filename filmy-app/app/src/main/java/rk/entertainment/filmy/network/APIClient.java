@@ -33,7 +33,7 @@ public class APIClient {
             if (BuildConfig.DEBUG)
                 logging.level(HttpLoggingInterceptor.Level.BODY);
             else
-                logging.level(HttpLoggingInterceptor.Level.NONE);
+                logging.level(HttpLoggingInterceptor.Level.BODY);
         }
 
         if (okHttpClient == null) {

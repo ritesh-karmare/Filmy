@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "908969996253",
+    "firebase_url": "https://filmy-y1994.firebaseio.com",
+    "project_id": "filmy-y1994",
+    "storage_bucket": "filmy-y1994.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908969996253:android:fcf0476de9ae1114",
+        "android_client_info": {
+          "package_name": "rk.entertainment.filmy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908969996253-nhl0dsbmehbcgusrf2dph8b8395khod3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbxLvtnOUzrFVZ9wIeIR4OBmjGOLRoDKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908969996253-nhl0dsbmehbcgusrf2dph8b8395khod3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

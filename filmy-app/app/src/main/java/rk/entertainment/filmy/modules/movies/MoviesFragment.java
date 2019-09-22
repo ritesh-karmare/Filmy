@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import rk.entertainment.filmy.R;
 import rk.entertainment.filmy.models.movieList.MoviesListData;
+import rk.entertainment.filmy.utils.AppLog;
 import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener;
 import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration;
 import rk.entertainment.filmy.utils.MovieModuleTypes;
