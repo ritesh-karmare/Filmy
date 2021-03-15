@@ -1,11 +1,11 @@
-package rk.entertainment.filmy.view.features.splash
+package rk.entertainment.filmy.ui.features.splash
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import rk.entertainment.filmy.R
-import rk.entertainment.filmy.view.features.moviesListing.MoviesListingActivity
+import rk.entertainment.filmy.ui.features.moviesListing.MoviesListingActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

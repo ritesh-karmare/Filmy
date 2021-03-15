@@ -1,8 +1,6 @@
 package rk.entertainment.filmy.utils
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.util.TypedValue
 import android.view.View
 import android.widget.Toast
@@ -16,14 +14,6 @@ object UIUtils {
     @JvmStatic
     fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
-    }
-
-    // Check whether Device is connected to internet or not
-    @JvmStatic
-    fun isNetworkAvailable(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetworkInfo: NetworkInfo = connectivityManager.activeNetworkInfo
-        return activeNetworkInfo.isConnected
     }
 
     // Function to display snackbar for messages, error, etc.

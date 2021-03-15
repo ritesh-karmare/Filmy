@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.view.features.movieDetails
+package rk.entertainment.filmy.ui.features.movieDetails
 
 import android.content.Intent
 import android.os.Bundle
@@ -16,13 +16,13 @@ import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
 import rk.entertainment.filmy.data.models.moviesDetails.*
 import rk.entertainment.filmy.databinding.ActivityMovieDetailsBinding
+import rk.entertainment.filmy.ui.features.moviesListing.MoviesListingAdapter
+import rk.entertainment.filmy.utils.ConnectionUtils
 import rk.entertainment.filmy.utils.DateTimeUtil.getHoursAndMinutes
 import rk.entertainment.filmy.utils.DateTimeUtil.getYearFromDate
 import rk.entertainment.filmy.utils.UIUtils.displayMessage
 import rk.entertainment.filmy.utils.UIUtils.dpToPx
-import rk.entertainment.filmy.utils.UIUtils.isNetworkAvailable
 import rk.entertainment.filmy.utils.rvUtils.VerticalItemDecoration
-import rk.entertainment.filmy.view.features.moviesListing.MoviesListingAdapter
 import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
@@ -85,7 +85,7 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
 
     // Trigger presenter to get the movie details
     private fun getMovieDetails() {
-        if (isNetworkAvailable(this))
+        if (ConnectionUtils.isNetworkAvailable())
             viewModel.getMovieDetails(movieId).observe(this, { movieData: MovieDetailsRes -> movieDetails(movieData) })
         else
             displayMessage(this, true, getString(R.string.no_internet_connection), binding.clMovieDetails, true)

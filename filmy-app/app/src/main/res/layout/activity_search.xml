@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/colorPrimaryLight"
-    tools:context=".view.features.search.SearchActivity">
+    tools:context=".ui.features.search.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.view.features.moviesListing
+package rk.entertainment.filmy.ui.features.moviesListing
 
 import android.content.Intent
 import android.os.Build
@@ -16,8 +16,8 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.databinding.ActivityMoviesMainBinding
 import rk.entertainment.filmy.utils.MovieModuleTypes
-import rk.entertainment.filmy.utils.ViewPagerAdapter
-import rk.entertainment.filmy.view.features.search.SearchActivity
+import rk.entertainment.filmy.ui.commons.adapter.ViewPagerAdapter
+import rk.entertainment.filmy.ui.features.search.SearchActivity
 
 class MoviesListingActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.view.features.moviesListing
+package rk.entertainment.filmy.ui.features.moviesListing
 
 import android.text.TextUtils
 import androidx.lifecycle.LiveData

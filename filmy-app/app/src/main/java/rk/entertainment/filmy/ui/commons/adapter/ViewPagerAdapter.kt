@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.utils
+package rk.entertainment.filmy.ui.commons.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -6,7 +6,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import org.jetbrains.annotations.Nullable
 import java.util.*
 
-class ViewPagerAdapter(fragmentManager: @Nullable FragmentManager?) : FragmentStatePagerAdapter(fragmentManager!!, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class ViewPagerAdapter(fragmentManager: @Nullable FragmentManager?) :
+        FragmentStatePagerAdapter(fragmentManager!!, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val mFragmentList: MutableList<Fragment> = ArrayList()
     private val mFragmentTitleList: MutableList<String> = ArrayList()
@@ -24,7 +25,7 @@ class ViewPagerAdapter(fragmentManager: @Nullable FragmentManager?) : FragmentSt
         mFragmentTitleList.add(title)
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return mFragmentTitleList[position]
     }
 }

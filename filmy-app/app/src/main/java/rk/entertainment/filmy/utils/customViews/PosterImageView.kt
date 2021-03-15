@@ -6,7 +6,7 @@ import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import androidx.appcompat.widget.AppCompatImageView
-import rk.entertainment.filmy.view.features.movieDetails.MovieDetailsActivity
+import rk.entertainment.filmy.ui.features.movieDetails.MovieDetailsActivity
 
 class PosterImageView : AppCompatImageView {
     private var phoneWidth = 0

@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.view.features.movieDetails
+package rk.entertainment.filmy.ui.features.movieDetails
 
 import android.content.Context
 import android.graphics.Bitmap

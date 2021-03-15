@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.view.features.moviesListing
+package rk.entertainment.filmy.ui.features.moviesListing
 
 import android.content.Context
 import android.os.Bundle
@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
 import rk.entertainment.filmy.databinding.FragmentMoviesListBinding
+import rk.entertainment.filmy.utils.ConnectionUtils
 import rk.entertainment.filmy.utils.MovieModuleTypes
 import rk.entertainment.filmy.utils.UIUtils.displayMessage
 import rk.entertainment.filmy.utils.UIUtils.dpToPx
-import rk.entertainment.filmy.utils.UIUtils.isNetworkAvailable
 import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener
 import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration
 import timber.log.Timber
@@ -89,7 +89,7 @@ class MoviesListingFragment : Fragment() {
     private fun getMovies(isRefreshed: Boolean) {
         Timber.i("%s%s", "getMovies " + movieModuleType.name + " ", moviesListingViewModel)
 
-        if (isNetworkAvailable(mContext)) {
+        if (ConnectionUtils.isNetworkAvailable()) {
             if (isRefreshed) {
                 adapter?.clear()
                 moviesListingViewModel.resetPage()

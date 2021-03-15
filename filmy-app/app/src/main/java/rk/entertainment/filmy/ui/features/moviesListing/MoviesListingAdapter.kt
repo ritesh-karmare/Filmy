@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.view.features.moviesListing
+package rk.entertainment.filmy.ui.features.moviesListing
 
 import android.content.Context
 import android.content.Intent
@@ -10,9 +10,9 @@ import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
 import rk.entertainment.filmy.data.repository.APIUtils
 import rk.entertainment.filmy.databinding.ItemMovieBinding
+import rk.entertainment.filmy.ui.features.movieDetails.MovieDetailsActivity
 import rk.entertainment.filmy.utils.GlideApp
 import rk.entertainment.filmy.utils.UIUtils.dpToPx
-import rk.entertainment.filmy.view.features.movieDetails.MovieDetailsActivity
 import java.util.*
 
 class MoviesListingAdapter(private val context: Context) : RecyclerView.Adapter<MoviesViewHolder>() {

@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.view.features.search
+package rk.entertainment.filmy.ui.features.search
 
 import android.os.Bundle
 import android.text.Editable
@@ -16,14 +16,14 @@ import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
 import rk.entertainment.filmy.data.models.movieList.MoviesListResponse
 import rk.entertainment.filmy.databinding.ActivitySearchBinding
+import rk.entertainment.filmy.ui.features.moviesListing.MoviesListingAdapter
+import rk.entertainment.filmy.ui.features.moviesListing.MoviesListingViewModel
+import rk.entertainment.filmy.utils.ConnectionUtils
 import rk.entertainment.filmy.utils.MovieModuleTypes
 import rk.entertainment.filmy.utils.UIUtils.displayMessage
 import rk.entertainment.filmy.utils.UIUtils.dpToPx
-import rk.entertainment.filmy.utils.UIUtils.isNetworkAvailable
 import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener
 import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration
-import rk.entertainment.filmy.view.features.moviesListing.MoviesListingAdapter
-import rk.entertainment.filmy.view.features.moviesListing.MoviesListingViewModel
 
 class SearchActivity : AppCompatActivity(), TextWatcher, OnTouchListener {
 
@@ -77,7 +77,7 @@ class SearchActivity : AppCompatActivity(), TextWatcher, OnTouchListener {
 
     private fun initViewModel() {
         moviesListingViewModel = ViewModelProvider(this).get(MoviesListingViewModel::class.java)
-        moviesListingViewModel!!.errorListener.observe(this, { msg: String? -> errorMsg(msg) })
+        moviesListingViewModel?.errorListener?.observe(this, { msg: String? -> errorMsg(msg) })
     }
 
     // Call movies data with searched query
@@ -88,10 +88,16 @@ class SearchActivity : AppCompatActivity(), TextWatcher, OnTouchListener {
 
     // trigger presenter to get movies for searched query
     private fun getMovies() {
-        if (isNetworkAvailable(this)) {
-            moviesListingViewModel!!.getMovies(MovieModuleTypes.SEARCH, query!!).observe(this, { moviesListResponse: MoviesListResponse -> if (moviesListingViewModel!!.addMore()) displayMoreMoviesList(moviesListResponse.results) else displayMoviesList(moviesListResponse.results) })
-        } else displayMessage(this@SearchActivity, true,
-                getString(R.string.no_internet_connection), binding.clSearch, true)
+        if (ConnectionUtils.isNetworkAvailable()) {
+
+            moviesListingViewModel?.getMovies(MovieModuleTypes.SEARCH, query!!)?.observe(this, { moviesListResponse: MoviesListResponse ->
+                if (moviesListingViewModel!!.addMore())
+                    displayMoreMoviesList(moviesListResponse.results)
+                else
+                    displayMoviesList(moviesListResponse.results)
+            })
+        } else
+            displayMessage(this@SearchActivity, true, getString(R.string.no_internet_connection), binding.clSearch, true)
     }
 
     private fun displayMoviesList(upcomingMoviesList: List<MoviesListData>) {

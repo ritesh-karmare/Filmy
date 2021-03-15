@@ -18,7 +18,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".view.features.splash.SplashActivity"
+            android:name=".ui.features.splash.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/splashTheme">
             <intent-filter>
@@ -29,22 +29,22 @@
         </activity>
 
         <activity
-            android:name=".view.features.moviesListing.MoviesListingActivity"
+            android:name=".ui.features.moviesListing.MoviesListingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".view.features.movieDetails.MovieDetailsActivity"
+            android:name=".ui.features.movieDetails.MovieDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MovieDetailTheme" />
 
         <activity
-            android:name=".view.features.search.SearchActivity"
+            android:name=".ui.features.search.SearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".view.features.movieDetails.TrailerActivity"
+            android:name=".ui.features.movieDetails.TrailerActivity"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/TrailerTheme" />
 
