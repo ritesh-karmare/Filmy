@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import rk.entertainment.filmy.R
-import rk.entertainment.filmy.view.features.movies.MoviesActivity
+import rk.entertainment.filmy.view.features.moviesListing.MoviesListingActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,7 +17,7 @@ class SplashActivity : AppCompatActivity() {
     private fun startHandler() {
         val handler = Handler()
         handler.postDelayed({
-            startActivity(Intent(this@SplashActivity, MoviesActivity::class.java))
+            startActivity(Intent(this@SplashActivity, MoviesListingActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }, 1000)

@@ -1,9 +1,10 @@
-package rk.entertainment.filmy.view.features.movies
+package rk.entertainment.filmy.view.features.moviesListing
 
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
@@ -14,13 +15,12 @@ import rk.entertainment.filmy.utils.UIUtils.dpToPx
 import rk.entertainment.filmy.view.features.movieDetails.MovieDetailsActivity
 import java.util.*
 
-class MoviesAdapter(private val context: Context) : RecyclerView.Adapter<MoviesViewHolder>() {
+class MoviesListingAdapter(private val context: Context) : RecyclerView.Adapter<MoviesViewHolder>() {
 
     private val moviesList: MutableList<MoviesListData>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
         val movieItemBinding = ItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        //View viewLoading = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false);
         return MoviesViewHolder(movieItemBinding)
     }
 
@@ -42,14 +42,14 @@ class MoviesAdapter(private val context: Context) : RecyclerView.Adapter<MoviesV
         } else
             holder.itemBinding.ivMoviePoster.setImageResource(R.drawable.loading)
 
-        val img = context.applicationContext.resources.getDrawable(R.drawable.ic_star)
-        img.setBounds(0, 0, dpToPx(20f, context), dpToPx(20f, context))
+        val img = ContextCompat.getDrawable(context,R.drawable.ic_star)
+        img?.setBounds(0, 0, dpToPx(20f, context), dpToPx(20f, context))
 
         holder.itemBinding.tvMovieRating.setCompoundDrawables(img, null, null, null)
 
         holder.itemBinding.cvItemMovie.setOnClickListener {
-            val data = moviesList[position]
-            context.startActivity(Intent(context, MovieDetailsActivity::class.java).putExtra("movieId", data.id))
+            val clickedData = moviesList[position]
+            context.startActivity(Intent(context, MovieDetailsActivity::class.java).putExtra("movieId", clickedData.id))
         }
     }
 

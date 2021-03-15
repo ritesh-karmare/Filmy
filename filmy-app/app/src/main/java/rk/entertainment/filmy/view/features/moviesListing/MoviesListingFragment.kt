@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.view.features.movies
+package rk.entertainment.filmy.view.features.moviesListing
 
 import android.content.Context
 import android.os.Bundle
@@ -21,16 +21,16 @@ import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener
 import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration
 import timber.log.Timber
 
-class MoviesFragment : Fragment() {
+class MoviesListingFragment : Fragment() {
     private var movieModuleType = MovieModuleTypes.UPCOMING
-    private var adapter: MoviesAdapter? = null
+    private var adapter: MoviesListingAdapter? = null
 
     private lateinit var mGridLayoutManager: GridLayoutManager
     private lateinit var endlessRecyclerViewOnScrollListener: EndlessRecyclerViewOnScrollListener
     private lateinit var mContext: Context
 
     private lateinit var binding: FragmentMoviesListBinding
-    private lateinit var moviesViewModel: MoviesViewModel
+    private lateinit var moviesListingViewModel: MoviesListingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +55,7 @@ class MoviesFragment : Fragment() {
         binding.rvUpcomingMovies.layoutManager = mGridLayoutManager
         binding.rvUpcomingMovies.itemAnimator = DefaultItemAnimator()
         binding.rvUpcomingMovies.addItemDecoration(GridSpacingItemDecoration(2, dpToPx(8f, mContext), true))
-        adapter = MoviesAdapter(mContext)
+        adapter = MoviesListingAdapter(mContext)
 
         binding.rvUpcomingMovies.adapter = adapter
     }
@@ -73,13 +73,13 @@ class MoviesFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        moviesViewModel = ViewModelProvider(this).get(movieModuleType.name, MoviesViewModel::class.java)
+        moviesListingViewModel = ViewModelProvider(this).get(movieModuleType.name, MoviesListingViewModel::class.java)
         getMovies(false)
     }
 
     private fun initObservers() {
         try {
-            moviesViewModel.errorListener.observe(viewLifecycleOwner, { message: String -> errorMsg(message) })
+            moviesListingViewModel.errorListener.observe(viewLifecycleOwner, { message: String -> errorMsg(message) })
         } catch (e: Exception) {
             Timber.e(e)
         }
@@ -87,17 +87,17 @@ class MoviesFragment : Fragment() {
 
     // Trigger viewModel to get the list of movies for specific MovieModuleType
     private fun getMovies(isRefreshed: Boolean) {
-        Timber.i("%s%s", "getMovies " + movieModuleType.name + " ", moviesViewModel)
+        Timber.i("%s%s", "getMovies " + movieModuleType.name + " ", moviesListingViewModel)
 
         if (isNetworkAvailable(mContext)) {
             if (isRefreshed) {
                 adapter?.clear()
-                moviesViewModel.resetPage()
+                moviesListingViewModel.resetPage()
             }
             binding.swipeRefreshUpcomingMovies.isRefreshing = true
 
-            moviesViewModel.getMovies(movieModuleType, "").observe(viewLifecycleOwner, {
-                if (moviesViewModel.addMore())
+            moviesListingViewModel.getMovies(movieModuleType, "").observe(viewLifecycleOwner, {
+                if (moviesListingViewModel.addMore())
                     displayMoreMoviesList(it.results)
                 else
                     displayMoviesList(it.results)
@@ -151,8 +151,8 @@ class MoviesFragment : Fragment() {
 
     companion object {
         private const val ARG_KEY = "moviesModuleType"
-        fun newInstance(movieModuleType: MovieModuleTypes?): MoviesFragment {
-            val fragment = MoviesFragment()
+        fun newInstance(movieModuleType: MovieModuleTypes?): MoviesListingFragment {
+            val fragment = MoviesListingFragment()
             val args = Bundle()
             args.putSerializable(ARG_KEY, movieModuleType)
             fragment.arguments = args

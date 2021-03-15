@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.view.features.movies
+package rk.entertainment.filmy.view.features.moviesListing
 
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
@@ -13,7 +13,7 @@ import rk.entertainment.filmy.utils.RemoteErrorEmitter
 import rk.entertainment.filmy.utils.callSafeApi
 import timber.log.Timber
 
-class MoviesViewModel : ViewModel(), RemoteErrorEmitter {
+class MoviesListingViewModel : ViewModel(), RemoteErrorEmitter {
 
     private val moviesRepository = MoviesRepository()
     private var page = 0
@@ -34,7 +34,7 @@ class MoviesViewModel : ViewModel(), RemoteErrorEmitter {
         }
 
         handlePageOffset(true)
-        val response = callSafeApi(this@MoviesViewModel) {
+        val response = callSafeApi(this@MoviesListingViewModel) {
 
             when (moduleTypes) {
                 NOW_PLAYING -> {

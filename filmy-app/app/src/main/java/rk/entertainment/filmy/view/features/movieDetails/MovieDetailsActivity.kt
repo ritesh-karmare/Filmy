@@ -22,7 +22,7 @@ import rk.entertainment.filmy.utils.UIUtils.displayMessage
 import rk.entertainment.filmy.utils.UIUtils.dpToPx
 import rk.entertainment.filmy.utils.UIUtils.isNetworkAvailable
 import rk.entertainment.filmy.utils.rvUtils.VerticalItemDecoration
-import rk.entertainment.filmy.view.features.movies.MoviesAdapter
+import rk.entertainment.filmy.view.features.moviesListing.MoviesListingAdapter
 import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
@@ -197,7 +197,7 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
             mLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
             binding.rvRecommended.layoutManager = mLayoutManager
             binding.rvRecommended.addItemDecoration(VerticalItemDecoration(this))
-            val moviesAdapter = MoviesAdapter(this)
+            val moviesAdapter = MoviesListingAdapter(this)
             moviesAdapter.addAll(recommendationsList)
             binding.rvRecommended.adapter = moviesAdapter
         } else {

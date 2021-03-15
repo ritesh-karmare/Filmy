@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".view.features.movieDetails.TrailerActivity">
+    tools:context=".view.features.movieDetails.`TrailerActivity.kt`">
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/yt_player"

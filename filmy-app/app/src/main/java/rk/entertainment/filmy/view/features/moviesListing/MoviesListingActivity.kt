@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.view.features.movies
+package rk.entertainment.filmy.view.features.moviesListing
 
 import android.content.Intent
 import android.os.Build
@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -18,7 +19,7 @@ import rk.entertainment.filmy.utils.MovieModuleTypes
 import rk.entertainment.filmy.utils.ViewPagerAdapter
 import rk.entertainment.filmy.view.features.search.SearchActivity
 
-class MoviesActivity : AppCompatActivity() {
+class MoviesListingActivity : AppCompatActivity() {
 
     private lateinit var tabLabelArr: Array<String>
     private var _doubleBackToExitPressedOnce = false
@@ -46,7 +47,7 @@ class MoviesActivity : AppCompatActivity() {
     }
 
     private fun initListeners() {
-        binding.ivSearch.setOnClickListener { view: View? -> startActivity(Intent(this@MoviesActivity, SearchActivity::class.java)) }
+        binding.ivSearch.setOnClickListener { view: View? -> startActivity(Intent(this@MoviesListingActivity, SearchActivity::class.java)) }
         binding.tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(selectedTab: TabLayout.Tab) {
                 updateTabs(selectedTab)
@@ -60,10 +61,10 @@ class MoviesActivity : AppCompatActivity() {
     // Setting up the viewPager with titles -> NowPLaying, Upcoming, TopRated, etc...
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(MoviesFragment.newInstance(MovieModuleTypes.NOW_PLAYING), tabLabelArr[0])
-        adapter.addFragment(MoviesFragment.newInstance(MovieModuleTypes.UPCOMING), tabLabelArr[1])
-        adapter.addFragment(MoviesFragment.newInstance(MovieModuleTypes.TOP_RATED), tabLabelArr[2])
-        adapter.addFragment(MoviesFragment.newInstance(MovieModuleTypes.POPULAR), tabLabelArr[3])
+        adapter.addFragment(MoviesListingFragment.newInstance(MovieModuleTypes.NOW_PLAYING), tabLabelArr[0])
+        adapter.addFragment(MoviesListingFragment.newInstance(MovieModuleTypes.UPCOMING), tabLabelArr[1])
+        adapter.addFragment(MoviesListingFragment.newInstance(MovieModuleTypes.TOP_RATED), tabLabelArr[2])
+        adapter.addFragment(MoviesListingFragment.newInstance(MovieModuleTypes.POPULAR), tabLabelArr[3])
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = adapter.count
         binding.tabs.setupWithViewPager(viewPager)
@@ -93,13 +94,13 @@ class MoviesActivity : AppCompatActivity() {
         for (i in 0 until binding.tabs.tabCount) {
             val tab = binding.tabs.getTabAt(i)
             if (tab != null) {
-                val tv = tab.customView as AppCompatTextView?
-                if (tv != null) if (tab.position == selectedTab.position) {
+                val tv = tab.customView as AppCompatTextView
+                if (tab.position == selectedTab.position) {
                     tv.setBackgroundResource(R.drawable.tab_selected_bg)
-                    tv.setTextColor(resources.getColor(android.R.color.white))
+                    tv.setTextColor(ContextCompat.getColor(this, android.R.color.white))
                 } else {
                     tv.setBackgroundResource(R.drawable.tab_unselected_bg)
-                    tv.setTextColor(resources.getColor(R.color.light_gray))
+                    tv.setTextColor(ContextCompat.getColor(this, R.color.light_gray))
                 }
             }
         }

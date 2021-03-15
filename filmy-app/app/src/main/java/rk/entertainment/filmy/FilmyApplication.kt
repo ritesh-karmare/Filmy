@@ -1,15 +1,17 @@
 package rk.entertainment.filmy
 
-import android.app.Application
+import androidx.multidex.MultiDex
+import androidx.multidex.MultiDexApplication
 import rk.entertainment.filmy.utils.ReleaseTree
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
-class FilmyApplication : Application() {
+class FilmyApplication : MultiDexApplication() {
 
 
     override fun onCreate() {
         super.onCreate()
+        MultiDex.install(this)
 
         if (BuildConfig.DEBUG)
             Timber.plant(DebugTree())
