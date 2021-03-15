@@ -1,0 +1,158 @@
+package rk.entertainment.filmy.view.features.search
+
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
+import android.view.MotionEvent
+import android.view.View
+import android.view.View.OnTouchListener
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
+import kotlinx.coroutines.*
+import rk.entertainment.filmy.R
+import rk.entertainment.filmy.data.models.movieList.MoviesListData
+import rk.entertainment.filmy.data.models.movieList.MoviesListResponse
+import rk.entertainment.filmy.databinding.ActivitySearchBinding
+import rk.entertainment.filmy.utils.MovieModuleTypes
+import rk.entertainment.filmy.utils.UIUtils.displayMessage
+import rk.entertainment.filmy.utils.UIUtils.dpToPx
+import rk.entertainment.filmy.utils.UIUtils.isNetworkAvailable
+import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener
+import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration
+import rk.entertainment.filmy.view.features.movies.MoviesAdapter
+import rk.entertainment.filmy.view.features.movies.MoviesViewModel
+
+class SearchActivity : AppCompatActivity(), TextWatcher, OnTouchListener {
+
+    private var mGridLayoutManager: GridLayoutManager? = null
+    private var endlessRecyclerViewOnScrollListener: EndlessRecyclerViewOnScrollListener? = null
+
+    private var adapter: MoviesAdapter? = null
+
+    private var moviesViewModel: MoviesViewModel? = null
+    private lateinit var binding: ActivitySearchBinding
+
+    var query: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initToolbar()
+        initReferences()
+        initListeners()
+        initViewModel()
+    }
+
+    private fun initToolbar() {
+        binding.tbSearch.setNavigationOnClickListener { onBackPressed() }
+        setSupportActionBar(binding.tbSearch)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private fun initReferences() {
+        mGridLayoutManager = GridLayoutManager(this, 2)
+        binding.rvSearch.layoutManager = mGridLayoutManager
+        binding.rvSearch.addItemDecoration(GridSpacingItemDecoration(2, dpToPx(8f, this), true))
+        binding.rvSearch.itemAnimator = DefaultItemAnimator()
+        adapter = MoviesAdapter(this)
+        binding.rvSearch.adapter = adapter
+    }
+
+    private fun initListeners() {
+
+        binding.etSearch.addTextChangedListener(this)
+        binding.etSearch.setOnTouchListener(this)
+
+        binding.rvSearch.addOnScrollListener(object : EndlessRecyclerViewOnScrollListener(mGridLayoutManager!!) {
+            override fun onLoadMore() {
+                toggleListenerLoading(true)
+                getMovies()
+            }
+        }.also { endlessRecyclerViewOnScrollListener = it })
+    }
+
+    private fun initViewModel() {
+        moviesViewModel = ViewModelProvider(this).get(MoviesViewModel::class.java)
+        moviesViewModel!!.errorListener.observe(this, { msg: String? -> errorMsg(msg) })
+    }
+
+    // Call movies data with searched query
+    private fun onQuery(s: String) {
+        query = s
+        getMovies()
+    }
+
+    // trigger presenter to get movies for searched query
+    private fun getMovies() {
+        if (isNetworkAvailable(this)) {
+            moviesViewModel!!.getMovies(MovieModuleTypes.SEARCH, query!!).observe(this, { moviesListResponse: MoviesListResponse -> if (moviesViewModel!!.addMore()) displayMoreMoviesList(moviesListResponse.results) else displayMoviesList(moviesListResponse.results) })
+        } else displayMessage(this@SearchActivity, true,
+                getString(R.string.no_internet_connection), binding.clSearch, true)
+    }
+
+    private fun displayMoviesList(upcomingMoviesList: List<MoviesListData>) {
+        resetAdapter()
+        loadAdapter(upcomingMoviesList)
+    }
+
+    private fun displayMoreMoviesList(upcomingMoviesList: List<MoviesListData>) {
+        toggleListenerLoading(false)
+        loadAdapter(upcomingMoviesList)
+        binding.rvSearch.stopScroll()
+    }
+
+    // Display API error
+    fun errorMsg(msg: String?) {
+        var msg = msg
+        toggleListenerLoading(false)
+        if (TextUtils.isEmpty(msg)) msg = getString(R.string.err_something_went_wrong)
+        displayMessage(this@SearchActivity, true, msg, binding.clSearch, true)
+    }
+
+    // Reset the recyclerview adapter
+    private fun resetAdapter() {
+        if (adapter!!.itemCount > 0) adapter!!.clear()
+    }
+
+    // Load recyclerview adapter with upcomingMovies data list
+    private fun loadAdapter(upcomingMoviesList: List<MoviesListData>) {
+        adapter!!.addAll(upcomingMoviesList)
+    }
+
+    // Set the ScrollListener to true\false when end of recyclerview reached for loading more data
+    private fun toggleListenerLoading(isLoading: Boolean) {
+        endlessRecyclerViewOnScrollListener!!.setLoading(isLoading)
+    }
+
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private var searchJob: Job? = null
+
+    override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+    override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+
+        if (charSequence.toString().trim().isEmpty()) return
+
+        searchJob?.cancel()
+        searchJob = coroutineScope.launch {
+            delay(1500)
+            onQuery(charSequence.toString())
+        }
+    }
+
+    override fun afterTextChanged(editable: Editable) {}
+
+    override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
+        if (motionEvent.action == MotionEvent.ACTION_UP) {
+
+            if (motionEvent.rawX >= binding.etSearch.right - binding.etSearch.compoundDrawables[2].bounds.width()) {
+                binding.etSearch.setText("")
+                return true
+            }
+        }
+        return false
+    }
+}
