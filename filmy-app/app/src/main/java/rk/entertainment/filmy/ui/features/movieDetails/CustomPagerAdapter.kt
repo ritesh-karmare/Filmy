@@ -15,11 +15,12 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.moviesDetails.BackdropData
-import rk.entertainment.filmy.data.repository.APIUtils
+import rk.entertainment.filmy.data.network.APIUtils
 import rk.entertainment.filmy.utils.GlideApp
 import timber.log.Timber
 
-class CustomPagerAdapter internal constructor(private val mContext: Context, private val backdropDataList: ArrayList<BackdropData>) : PagerAdapter() {
+class CustomPagerAdapter(private val mContext: Context, private val backdropDataList: ArrayList<BackdropData>)
+    : PagerAdapter() {
 
     private val mLayoutInflater: LayoutInflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 

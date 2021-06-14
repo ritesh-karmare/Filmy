@@ -11,7 +11,7 @@ object DateTimeUtil {
     @JvmStatic
     fun getYearFromDate(releaseDate: String?): String? {
         return try {
-            if (releaseDate == null || releaseDate.isEmpty()) return ""
+            if (releaseDate.isNullOrEmpty()) return ""
             val myDate: Calendar = GregorianCalendar()
             val theDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(releaseDate)
             myDate.time = theDate

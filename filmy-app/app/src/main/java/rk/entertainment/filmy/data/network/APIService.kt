@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.data.repository
+package rk.entertainment.filmy.data.network
 
 import io.reactivex.Observable
 import retrofit2.http.GET

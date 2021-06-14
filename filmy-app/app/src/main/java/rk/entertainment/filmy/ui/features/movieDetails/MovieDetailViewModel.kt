@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import rk.entertainment.filmy.data.repository.MoviesRepository
+import rk.entertainment.filmy.repository.MoviesRepository
 import rk.entertainment.filmy.utils.RemoteErrorEmitter
 import rk.entertainment.filmy.utils.callSafeApi
 

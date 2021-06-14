@@ -48,8 +48,8 @@ class SearchActivity : AppCompatActivity(), TextWatcher, OnTouchListener {
     }
 
     private fun initToolbar() {
-        binding.tbSearch.setNavigationOnClickListener { onBackPressed() }
         setSupportActionBar(binding.tbSearch)
+        binding.tbSearch.setNavigationOnClickListener { onBackPressed() }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 

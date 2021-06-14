@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.data.repository;
+package rk.entertainment.filmy.data.network;
 
 import rk.entertainment.filmy.BuildConfig;
 

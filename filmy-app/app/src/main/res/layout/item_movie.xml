@@ -33,6 +33,7 @@
             android:drawableLeft="@drawable/ic_star"
             android:drawablePadding="@dimen/spacing_2dp"
             android:fontFamily="sans-serif-medium"
+            android:maxLength="3"
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
             android:textStyle="normal"

@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.data.repository
+package rk.entertainment.filmy.data.network
 
 import okhttp3.HttpUrl
 import okhttp3.Interceptor

@@ -1,7 +1,8 @@
-package rk.entertainment.filmy.data.repository
+package rk.entertainment.filmy.repository
 
 import rk.entertainment.filmy.data.models.movieList.MoviesListResponse
 import rk.entertainment.filmy.data.models.moviesDetails.MovieDetailsRes
+import rk.entertainment.filmy.data.network.APIClient
 
 class MoviesRepository {
 

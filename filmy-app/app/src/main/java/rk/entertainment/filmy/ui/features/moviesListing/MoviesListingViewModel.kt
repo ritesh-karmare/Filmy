@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import rk.entertainment.filmy.data.models.movieList.MoviesListResponse
-import rk.entertainment.filmy.data.repository.MoviesRepository
+import rk.entertainment.filmy.repository.MoviesRepository
 import rk.entertainment.filmy.utils.MovieModuleTypes
 import rk.entertainment.filmy.utils.MovieModuleTypes.*
 import rk.entertainment.filmy.utils.RemoteErrorEmitter

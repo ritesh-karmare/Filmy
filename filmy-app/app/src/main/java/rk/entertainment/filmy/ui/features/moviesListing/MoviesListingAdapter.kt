@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
-import rk.entertainment.filmy.data.repository.APIUtils
+import rk.entertainment.filmy.data.network.APIUtils
 import rk.entertainment.filmy.databinding.ItemMovieBinding
 import rk.entertainment.filmy.ui.features.movieDetails.MovieDetailsActivity
 import rk.entertainment.filmy.utils.GlideApp
