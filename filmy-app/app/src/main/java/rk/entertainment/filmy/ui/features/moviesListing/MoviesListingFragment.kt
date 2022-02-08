@@ -14,14 +14,17 @@ import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
 import rk.entertainment.filmy.databinding.FragmentMoviesListBinding
 import rk.entertainment.filmy.utils.ConnectionUtils
+import rk.entertainment.filmy.utils.Logs
 import rk.entertainment.filmy.utils.MovieModuleTypes
 import rk.entertainment.filmy.utils.UIUtils.displayMessage
 import rk.entertainment.filmy.utils.UIUtils.dpToPx
 import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener
 import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration
-import timber.log.Timber
 
 class MoviesListingFragment : Fragment() {
+
+    private val TAG = "MoviesListingFragment"
+
     private var movieModuleType = MovieModuleTypes.UPCOMING
     private var adapter: MoviesListingAdapter? = null
 
@@ -81,13 +84,13 @@ class MoviesListingFragment : Fragment() {
         try {
             moviesListingViewModel.errorListener.observe(viewLifecycleOwner, { message: String -> errorMsg(message) })
         } catch (e: Exception) {
-            Timber.e(e)
+            Logs.logException(e)
         }
     }
 
     // Trigger viewModel to get the list of movies for specific MovieModuleType
     private fun getMovies(isRefreshed: Boolean) {
-        Timber.i("%s%s", "getMovies " + movieModuleType.name + " ", moviesListingViewModel)
+        Logs.i(TAG, "getMovies " + movieModuleType.name)
 
         if (ConnectionUtils.isNetworkAvailable()) {
             if (isRefreshed) {

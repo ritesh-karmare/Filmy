@@ -20,12 +20,10 @@ import rk.entertainment.filmy.ui.features.moviesListing.MoviesListingAdapter
 import rk.entertainment.filmy.utils.ConnectionUtils
 import rk.entertainment.filmy.utils.DateTimeUtil.getHoursAndMinutes
 import rk.entertainment.filmy.utils.DateTimeUtil.getYearFromDate
+import rk.entertainment.filmy.utils.Logs
 import rk.entertainment.filmy.utils.UIUtils.displayMessage
 import rk.entertainment.filmy.utils.UIUtils.dpToPx
 import rk.entertainment.filmy.utils.rvUtils.VerticalItemDecoration
-import timber.log.Timber
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
     // appbar scroll range
@@ -51,7 +49,7 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
             initViewModel()
             getMovieDetails()
         } catch (e: Exception) {
-            Timber.e(e)
+            Logs.logException(e)
         }
     }
 

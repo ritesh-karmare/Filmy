@@ -17,7 +17,7 @@ import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.moviesDetails.BackdropData
 import rk.entertainment.filmy.data.network.APIUtils
 import rk.entertainment.filmy.utils.GlideApp
-import timber.log.Timber
+import rk.entertainment.filmy.utils.Logs
 
 class CustomPagerAdapter(private val mContext: Context, private val backdropDataList: ArrayList<BackdropData>)
     : PagerAdapter() {
@@ -48,7 +48,7 @@ class CustomPagerAdapter(private val mContext: Context, private val backdropData
             if (data.filePath.isNotEmpty()) {
 
                 val backDropUrl = APIUtils.IMAGE_BASE_URL + APIUtils.BACKDROP_IMAGE_SIZE + backdropDataList[position].filePath
-                Timber.d("instantiateItem backDrop %s", backDropUrl)
+                Logs.d("instantiateItem backDrop %s", backDropUrl)
 
                 GlideApp.with(mContext)
                         .asBitmap()
@@ -75,7 +75,7 @@ class CustomPagerAdapter(private val mContext: Context, private val backdropData
 
             container.addView(itemView)
         } catch (e: Exception) {
-            Timber.e(e)
+            Logs.logException(e)
         }
         return itemView
     }

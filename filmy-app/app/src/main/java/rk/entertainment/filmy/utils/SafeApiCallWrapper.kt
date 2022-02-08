@@ -6,7 +6,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.HttpException
-import timber.log.Timber
 import java.io.IOException
 import java.net.SocketTimeoutException
 
@@ -16,7 +15,7 @@ suspend fun <T> callSafeApi(emitter: RemoteErrorEmitter, responseFunction: suspe
         response
     } catch (e: Exception) {
         withContext(Dispatchers.Main) {
-            Timber.e(e)
+            Logs.logException(e)
             when (e) {
                 is HttpException -> {
                     val body = e.response()?.errorBody()
@@ -32,7 +31,7 @@ suspend fun <T> callSafeApi(emitter: RemoteErrorEmitter, responseFunction: suspe
 }
 
 val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-    Timber.e(throwable)
+    Logs.logException(throwable)
 }
 
 interface RemoteErrorEmitter {
@@ -58,7 +57,7 @@ fun getErrorMessage(responseBody: ResponseBody?): String {
             else -> "Something went wrong"
         }
     } catch (e: Exception) {
-        Timber.e(e)
+        Logs.logException(e)
         "Something went wrong"
     }
 }

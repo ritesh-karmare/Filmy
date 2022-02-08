@@ -7,13 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import rk.entertainment.filmy.data.models.movieList.MoviesListResponse
 import rk.entertainment.filmy.repository.MoviesRepository
+import rk.entertainment.filmy.utils.Logs
 import rk.entertainment.filmy.utils.MovieModuleTypes
 import rk.entertainment.filmy.utils.MovieModuleTypes.*
 import rk.entertainment.filmy.utils.RemoteErrorEmitter
 import rk.entertainment.filmy.utils.callSafeApi
-import timber.log.Timber
 
 class MoviesListingViewModel : ViewModel(), RemoteErrorEmitter {
+
+    private val TAG = "MoviesListingViewModel"
 
     private val moviesRepository = MoviesRepository()
     private var page = 0
@@ -63,7 +65,7 @@ class MoviesListingViewModel : ViewModel(), RemoteErrorEmitter {
 
     // Increment/Decrement page offset for pagination
     private fun handlePageOffset(increment: Boolean) {
-        Timber.i("page:$page totalPages:$totalPages")
+        Logs.i(TAG, "page:$page totalPages:$totalPages")
         if (increment) {
             if (page < totalPages) page += 1
         } else if (page > 1) page -= 1
@@ -76,7 +78,7 @@ class MoviesListingViewModel : ViewModel(), RemoteErrorEmitter {
     fun addMore() = page > 1
 
     override fun onError(msg: String) {
-        Timber.i("onError msg : $msg")
+        Logs.i("onError msg :", msg)
         _errorListener.value = msg
         handlePageOffset(false)
     }

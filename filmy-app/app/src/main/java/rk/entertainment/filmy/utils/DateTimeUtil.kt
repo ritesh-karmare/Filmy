@@ -1,6 +1,5 @@
 package rk.entertainment.filmy.utils
 
-import timber.log.Timber
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -17,7 +16,7 @@ object DateTimeUtil {
             myDate.time = theDate
             myDate[Calendar.YEAR].toString()
         } catch (e: ParseException) {
-            Timber.e(e)
+            Logs.logException(e)
             releaseDate
         }
     }

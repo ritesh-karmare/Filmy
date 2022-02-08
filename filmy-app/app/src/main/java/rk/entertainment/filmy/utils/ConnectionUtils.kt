@@ -12,8 +12,8 @@ object ConnectionUtils {
     fun isNetworkAvailable(): Boolean {
 
         val connectivityManager = FilmyApplication.appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetworkInfo: NetworkInfo = connectivityManager.activeNetworkInfo
-        return activeNetworkInfo.isConnected
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo?.isConnected ?: false
     }
 
 }
