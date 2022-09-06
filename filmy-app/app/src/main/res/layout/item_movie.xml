@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cv_item_movie"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:foreground="@drawable/cardview_ripple"
-    app:cardBackgroundColor="@color/colorAccent25"
-    app:cardCornerRadius="@dimen/cardview_default_radius"
-    app:cardElevation="@dimen/cardview_default_elevation">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_item_movie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foreground="@drawable/cardview_ripple"
+        app:cardBackgroundColor="@color/colorAccent25"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation">
 
 
-    <FrameLayout
+        <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -39,6 +41,7 @@
             android:textStyle="normal"
             tools:text="2.5" />
 
-    </FrameLayout>
+        </FrameLayout>
 
-</com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
