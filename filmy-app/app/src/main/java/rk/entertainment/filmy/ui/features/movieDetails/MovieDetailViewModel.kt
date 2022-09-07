@@ -3,31 +3,35 @@ package rk.entertainment.filmy.ui.features.movieDetails
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import rk.entertainment.filmy.repository.MoviesRepository
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import rk.entertainment.filmy.domain.useCase.GetMovieDetailsUseCase
 import rk.entertainment.filmy.utils.RemoteErrorEmitter
-import rk.entertainment.filmy.utils.callSafeApi
+import rk.entertainment.filmy.utils.Resource
+import javax.inject.Inject
 
-class MovieDetailViewModel() : ViewModel(), RemoteErrorEmitter {
+@HiltViewModel
+class MovieDetailViewModel @Inject constructor(private val getMovieDetailsUseCase: GetMovieDetailsUseCase) :
+    ViewModel() {
 
-    private val moviesRepository = MoviesRepository()
-    private val detailTypes = "images,videos,recommendations"
+    private val _movieDetailsStateFlow = MutableStateFlow(MovieDetailsState())
+    val movieDetailsStateFlow: StateFlow<MovieDetailsState> = _movieDetailsStateFlow
 
-    private val _errorListener = MutableLiveData<String>()
-    val errorListener: LiveData<String>
-        get() = _errorListener
-
-
-    fun getMovieDetails(movieId: Int) = liveData {
-        val response = callSafeApi(this@MovieDetailViewModel) {
-            moviesRepository.getMovieDetails(movieId, detailTypes)
-        }
-
-        if (response != null)
-            emit(response)
-    }
-
-    override fun onError(msg: String) {
-        _errorListener.value = msg
+    fun getMovieDetails(movieId: Int) {
+        getMovieDetailsUseCase(movieId)
+            .onEach {
+                when (it) {
+                    is Resource.Loading ->
+                        _movieDetailsStateFlow.emit(MovieDetailsState(loading = true))
+                    is Resource.Success ->
+                        _movieDetailsStateFlow.emit(MovieDetailsState(movieDetails = it.data))
+                    is Resource.Error ->
+                        _movieDetailsStateFlow.emit(MovieDetailsState(error = it.message))
+                }
+            }.launchIn(viewModelScope)
     }
 }

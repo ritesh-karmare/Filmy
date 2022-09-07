@@ -12,7 +12,7 @@ class RequestInterceptor : Interceptor {
         var request: Request = chain.request()
 
         val url: HttpUrl = request.url.newBuilder()
-                .addQueryParameter("api_key", APIUtils.API_KEY)
+            .addQueryParameter("api_key", API_KEY)
                 .build()
 
         request = request.newBuilder().url(url).build()

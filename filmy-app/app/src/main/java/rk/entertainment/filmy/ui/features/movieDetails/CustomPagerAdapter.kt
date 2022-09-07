@@ -15,7 +15,8 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.moviesDetails.BackdropData
-import rk.entertainment.filmy.data.network.APIUtils
+import rk.entertainment.filmy.data.network.BACKDROP_IMAGE_SIZE
+import rk.entertainment.filmy.data.network.IMAGE_BASE_URL
 import rk.entertainment.filmy.utils.GlideApp
 import rk.entertainment.filmy.utils.Logs
 
@@ -47,7 +48,7 @@ class CustomPagerAdapter(private val mContext: Context, private val backdropData
 
             if (data.filePath.isNotEmpty()) {
 
-                val backDropUrl = APIUtils.IMAGE_BASE_URL + APIUtils.BACKDROP_IMAGE_SIZE + backdropDataList[position].filePath
+                val backDropUrl = IMAGE_BASE_URL + BACKDROP_IMAGE_SIZE + backdropDataList[position].filePath
                 Logs.d("instantiateItem backDrop %s", backDropUrl)
 
                 GlideApp.with(mContext)

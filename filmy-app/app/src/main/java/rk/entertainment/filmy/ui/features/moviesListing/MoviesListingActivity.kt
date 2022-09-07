@@ -13,12 +13,14 @@ import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import dagger.hilt.android.AndroidEntryPoint
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.databinding.ActivityMoviesMainBinding
-import rk.entertainment.filmy.utils.MovieModuleTypes
-import rk.entertainment.filmy.ui.commons.adapter.ViewPagerAdapter
+import rk.entertainment.filmy.utils.ViewPagerAdapter
 import rk.entertainment.filmy.ui.features.search.SearchActivity
+import rk.entertainment.filmy.utils.MovieModuleTypes
 
+@AndroidEntryPoint
 class MoviesListingActivity : AppCompatActivity() {
 
     private lateinit var tabLabelArr: Array<String>

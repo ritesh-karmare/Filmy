@@ -5,19 +5,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import rk.entertainment.filmy.data.models.movieList.MoviesListResponse
-import rk.entertainment.filmy.repository.MoviesRepository
+import rk.entertainment.filmy.domain.repository.MoviesRepository
 import rk.entertainment.filmy.utils.Logs
 import rk.entertainment.filmy.utils.MovieModuleTypes
 import rk.entertainment.filmy.utils.MovieModuleTypes.*
 import rk.entertainment.filmy.utils.RemoteErrorEmitter
 import rk.entertainment.filmy.utils.callSafeApi
+import javax.inject.Inject
 
-class MoviesListingViewModel : ViewModel(), RemoteErrorEmitter {
+@HiltViewModel
+class MoviesListingViewModel @Inject constructor(private val moviesRepository: MoviesRepository) :
+    ViewModel(), RemoteErrorEmitter {
 
     private val TAG = "MoviesListingViewModel"
 
-    private val moviesRepository = MoviesRepository()
     private var page = 0
     private var totalPages = 1
     private val INCLUDE_ADULT = false

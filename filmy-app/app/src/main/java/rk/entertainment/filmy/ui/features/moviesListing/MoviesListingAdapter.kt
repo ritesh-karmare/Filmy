@@ -8,7 +8,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
-import rk.entertainment.filmy.data.network.APIUtils
+import rk.entertainment.filmy.data.network.IMAGE_BASE_URL
+import rk.entertainment.filmy.data.network.POSTER_IMAGE_SIZE
 import rk.entertainment.filmy.databinding.ItemMovieBinding
 import rk.entertainment.filmy.ui.features.movieDetails.MovieDetailsActivity
 import rk.entertainment.filmy.utils.GlideApp
@@ -28,7 +29,7 @@ class MoviesListingAdapter(private val context: Context) : RecyclerView.Adapter<
         val data = moviesList[position]
         val voteAverage = data.voteAverage?.toString()
         val posterPath = data.posterPath
-        val posterUrl = APIUtils.IMAGE_BASE_URL + APIUtils.POSTER_IMAGE_SIZE + posterPath
+        val posterUrl = IMAGE_BASE_URL + POSTER_IMAGE_SIZE + posterPath
 
         holder.itemBinding.tvMovieRating.text = voteAverage
 

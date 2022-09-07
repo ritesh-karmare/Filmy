@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
@@ -25,6 +26,7 @@ import rk.entertainment.filmy.utils.UIUtils.dpToPx
 import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener
 import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration
 
+@AndroidEntryPoint
 class SearchActivity : AppCompatActivity(), TextWatcher, OnTouchListener {
 
     private var mGridLayoutManager: GridLayoutManager? = null

@@ -7,11 +7,16 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
 import rk.entertainment.filmy.data.models.moviesDetails.*
@@ -25,6 +30,7 @@ import rk.entertainment.filmy.utils.UIUtils.displayMessage
 import rk.entertainment.filmy.utils.UIUtils.dpToPx
 import rk.entertainment.filmy.utils.rvUtils.VerticalItemDecoration
 
+@AndroidEntryPoint
 class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
     // appbar scroll range
     private var scrollRange = -1
@@ -45,6 +51,7 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
             setContentView(binding.root)
             initToolbar()
             initReferences()
+            initObservers()
             initListeners()
             initViewModel()
             getMovieDetails()
@@ -53,14 +60,30 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
         }
     }
 
+    private fun initObservers() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.movieDetailsStateFlow.collect {
+
+                    if(!it.error.isNullOrEmpty()) {
+                        errorMsg(it.error)
+                    }
+
+                    if(it.movieDetails != null) {
+                        movieDetails(it.movieDetails)
+                    }
+                }
+            }
+        }
+    }
+
     private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(MovieDetailViewModel::class.java)
-        viewModel.errorListener.observe(this, { errMsg: String -> errorMsg(errMsg) })
     }
 
     private fun initToolbar() {
         setSupportActionBar(binding.toolbar)
-        if (supportActionBar != null) supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        if(supportActionBar != null) supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.collapsableToolbar.title = " "
     }
 
@@ -83,10 +106,16 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
 
     // Trigger presenter to get the movie details
     private fun getMovieDetails() {
-        if (ConnectionUtils.isNetworkAvailable())
-            viewModel.getMovieDetails(movieId).observe(this, { movieData: MovieDetailsRes -> movieDetails(movieData) })
-        else
-            displayMessage(this, true, getString(R.string.no_internet_connection), binding.clMovieDetails, true)
+        if(ConnectionUtils.isNetworkAvailable()) {
+            viewModel.getMovieDetails(movieId)
+        } else
+            displayMessage(
+                this,
+                true,
+                getString(R.string.no_internet_connection),
+                binding.clMovieDetails,
+                true
+            )
     }
 
     // Init the dots for viewPager
@@ -118,9 +147,10 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
     private fun updateIndicators(selectedPostion: Int) {
         for (indicatorPosition in indicators!!.indices) {
             indicators!![indicatorPosition].setBackgroundResource(
-                    if (indicatorPosition == selectedPostion)
-                        R.drawable.indicator_selected
-                    else R.drawable.indicator_default)
+                if(indicatorPosition == selectedPostion)
+                    R.drawable.indicator_selected
+                else R.drawable.indicator_default
+            )
         }
     }
 
@@ -134,8 +164,10 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
     }
 
     // Set Images, title, genre, releaseDate, VoteAverage, Runtime
-    private fun setUpMovieHeader(backdrops: List<BackdropData>, title: String, genres: List<GenreData>,
-                                 releaseDate: String, rating: String, runtime: Int) {
+    private fun setUpMovieHeader(
+        backdrops: List<BackdropData>, title: String, genres: List<GenreData>,
+        releaseDate: String, rating: String, runtime: Int
+    ) {
         customPagerAdapter?.addAll(backdrops)
         initDots()
         addDots(backdrops.size)
@@ -145,7 +177,7 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
         binding.tvMovieDetailsYear.text = releaseYear
         binding.tvMovieDetailsRating.text = rating
 
-        if (!genres.isNullOrEmpty()) {
+        if(!genres.isNullOrEmpty()) {
             val genre = genres.joinToString(",") { it.name } //getAppendedStringFromList(genres)
             binding.tvMovieGenre.visibility = View.VISIBLE
             binding.tvMovieGenre.text = genre
@@ -165,11 +197,14 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
     }
 
     // Set original title, status, production companies
-    private fun setUpMovieFacts(originalTitle: String, status: String,
-                                productionCompanies: List<ProductionCompanyData>) {
+    private fun setUpMovieFacts(
+        originalTitle: String, status: String,
+        productionCompanies: List<ProductionCompanyData>
+    ) {
         binding.tvMovieDetailsOrgTitle.text = originalTitle
         binding.tvMovieDetailsStatus.text = status
-        binding.tvMovieDetailsProdCompanies.text = productionCompanies.joinToString(",") { it.name } //getAppendedStringFromList(productionCompanies)
+        binding.tvMovieDetailsProdCompanies.text =
+            productionCompanies.joinToString(",") { it.name } //getAppendedStringFromList(productionCompanies)
     }
 
     // Set videos thumbnail in the horizontal recyclerView
