@@ -1,52 +1,55 @@
 package rk.entertainment.filmy.ui.features.search
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
 import android.view.MotionEvent
-import android.view.View
-import android.view.View.OnTouchListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
-import rk.entertainment.filmy.data.models.movieList.MoviesListResponse
 import rk.entertainment.filmy.databinding.ActivitySearchBinding
+import rk.entertainment.filmy.ui.features.movieDetails.MovieDetailsActivity
+import rk.entertainment.filmy.ui.features.moviesListing.MovieClickListener
 import rk.entertainment.filmy.ui.features.moviesListing.MoviesListingAdapter
-import rk.entertainment.filmy.ui.features.moviesListing.MoviesListingViewModel
 import rk.entertainment.filmy.utils.ConnectionUtils
-import rk.entertainment.filmy.utils.MovieModuleTypes
+import rk.entertainment.filmy.utils.UIUtils
 import rk.entertainment.filmy.utils.UIUtils.displayMessage
 import rk.entertainment.filmy.utils.UIUtils.dpToPx
 import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener
 import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration
 
 @AndroidEntryPoint
-class SearchActivity : AppCompatActivity(), TextWatcher, OnTouchListener {
+class SearchActivity : AppCompatActivity(), MovieClickListener {
 
-    private var mGridLayoutManager: GridLayoutManager? = null
     private var endlessRecyclerViewOnScrollListener: EndlessRecyclerViewOnScrollListener? = null
 
     private var adapter: MoviesListingAdapter? = null
 
-    private var moviesListingViewModel: MoviesListingViewModel? = null
+    private var searchMovieViewModel: SearchMovieViewModel? = null
     private lateinit var binding: ActivitySearchBinding
 
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
     var query: String? = null
+    private var searchJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
         initToolbar()
-        initReferences()
+        initRv()
         initListeners()
         initViewModel()
+        initObservers()
     }
 
     private fun initToolbar() {
@@ -55,21 +58,42 @@ class SearchActivity : AppCompatActivity(), TextWatcher, OnTouchListener {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun initReferences() {
-        mGridLayoutManager = GridLayoutManager(this, 2)
-        binding.rvSearch.layoutManager = mGridLayoutManager
-        binding.rvSearch.addItemDecoration(GridSpacingItemDecoration(2, dpToPx(8f, this), true))
-        binding.rvSearch.itemAnimator = DefaultItemAnimator()
-        adapter = MoviesListingAdapter(this)
-        binding.rvSearch.adapter = adapter
+    private fun initRv() {
+        binding.rvSearch.apply {
+            addItemDecoration(GridSpacingItemDecoration(2, dpToPx(8f, this@SearchActivity), true))
+            itemAnimator = DefaultItemAnimator()
+            this@SearchActivity.adapter = MoviesListingAdapter(this@SearchActivity)
+            adapter = this@SearchActivity.adapter
+        }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initListeners() {
 
-        binding.etSearch.addTextChangedListener(this)
-        binding.etSearch.setOnTouchListener(this)
+        binding.etSearch.setOnTouchListener { view, motionEvent ->
+            if(motionEvent.action == MotionEvent.ACTION_UP) {
 
-        binding.rvSearch.addOnScrollListener(object : EndlessRecyclerViewOnScrollListener(mGridLayoutManager!!) {
+                if(motionEvent.rawX >= binding.etSearch.right - binding.etSearch.compoundDrawables[2].bounds.width()) {
+                    binding.etSearch.setText("")
+                    return@setOnTouchListener true
+                }
+            }
+            return@setOnTouchListener false
+        }
+
+        binding.etSearch.doOnTextChanged { text, _, _, _ ->
+            if(text.toString().trim().isEmpty()) return@doOnTextChanged
+
+            searchJob?.cancel()
+            searchJob = coroutineScope.launch {
+                delay(1500)
+                onQuery(text.toString())
+            }
+        }
+
+        binding.rvSearch.addOnScrollListener(object : EndlessRecyclerViewOnScrollListener(
+            binding.rvSearch.layoutManager as GridLayoutManager
+        ) {
             override fun onLoadMore() {
                 toggleListenerLoading(true)
                 getMovies()
@@ -78,8 +102,28 @@ class SearchActivity : AppCompatActivity(), TextWatcher, OnTouchListener {
     }
 
     private fun initViewModel() {
-        moviesListingViewModel = ViewModelProvider(this).get(MoviesListingViewModel::class.java)
-        moviesListingViewModel?.errorListener?.observe(this, { msg: String? -> errorMsg(msg) })
+        searchMovieViewModel = ViewModelProvider(this).get(SearchMovieViewModel::class.java)
+    }
+
+    private fun initObservers() {
+        lifecycleScope.launchWhenCreated {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                searchMovieViewModel?.movieListStateFlow?.collect {
+
+                    UIUtils.hideKeyboard(this@SearchActivity, binding.etSearch)
+
+                    if(!it.error.isNullOrEmpty()) {
+                        errorMsg(it.error)
+                    }
+
+                    it.movieDetails?.let { moviesListResponse ->
+                        if(moviesListResponse.results.isNotEmpty())
+                            displayMoviesList(moviesListResponse.results)
+                    }
+                }
+            }
+        }
     }
 
     // Call movies data with searched query
@@ -90,45 +134,27 @@ class SearchActivity : AppCompatActivity(), TextWatcher, OnTouchListener {
 
     // trigger presenter to get movies for searched query
     private fun getMovies() {
-        if (ConnectionUtils.isNetworkAvailable()) {
-
-            moviesListingViewModel?.getMovies(MovieModuleTypes.SEARCH, query!!)?.observe(this, { moviesListResponse: MoviesListResponse ->
-                if (moviesListingViewModel!!.addMore())
-                    displayMoreMoviesList(moviesListResponse.results)
-                else
-                    displayMoviesList(moviesListResponse.results)
-            })
+        if(ConnectionUtils.isNetworkAvailable()) {
+            searchMovieViewModel?.searchmovies(query!!)
         } else
-            displayMessage(this@SearchActivity, true, getString(R.string.no_internet_connection), binding.clSearch, true)
+            errorMsg(getString(R.string.no_internet_connection))
     }
 
     private fun displayMoviesList(upcomingMoviesList: List<MoviesListData>) {
-        resetAdapter()
-        loadAdapter(upcomingMoviesList)
-    }
-
-    private fun displayMoreMoviesList(upcomingMoviesList: List<MoviesListData>) {
-        toggleListenerLoading(false)
-        loadAdapter(upcomingMoviesList)
-        binding.rvSearch.stopScroll()
+        adapter?.let {
+            if(it.itemCount > 0) {
+                toggleListenerLoading(false)
+                binding.rvSearch.stopScroll()
+            }
+            it.addAll(upcomingMoviesList)
+        }
     }
 
     // Display API error
-    fun errorMsg(errMsg: String?) {
-        var msg = errMsg
+    private fun errorMsg(errMsg: String?) {
         toggleListenerLoading(false)
-        if (TextUtils.isEmpty(msg)) msg = getString(R.string.err_something_went_wrong)
-        displayMessage(this@SearchActivity, true, msg, binding.clSearch, true)
-    }
-
-    // Reset the recyclerview adapter
-    private fun resetAdapter() {
-        if (adapter!!.itemCount > 0) adapter!!.clear()
-    }
-
-    // Load recyclerview adapter with upcomingMovies data list
-    private fun loadAdapter(upcomingMoviesList: List<MoviesListData>) {
-        adapter!!.addAll(upcomingMoviesList)
+        val msg = errMsg ?: getString(R.string.err_something_went_wrong)
+        displayMessage(this@SearchActivity, msg, binding.clSearch)
     }
 
     // Set the ScrollListener to true\false when end of recyclerview reached for loading more data
@@ -136,31 +162,9 @@ class SearchActivity : AppCompatActivity(), TextWatcher, OnTouchListener {
         endlessRecyclerViewOnScrollListener!!.setLoading(isLoading)
     }
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
-    private var searchJob: Job? = null
-
-    override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-    override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-
-        if (charSequence.toString().trim().isEmpty()) return
-
-        searchJob?.cancel()
-        searchJob = coroutineScope.launch {
-            delay(1500)
-            onQuery(charSequence.toString())
-        }
-    }
-
-    override fun afterTextChanged(editable: Editable) {}
-
-    override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-        if (motionEvent.action == MotionEvent.ACTION_UP) {
-
-            if (motionEvent.rawX >= binding.etSearch.right - binding.etSearch.compoundDrawables[2].bounds.width()) {
-                binding.etSearch.setText("")
-                return true
-            }
-        }
-        return false
+    override fun onMovieItemClicked(movieId: Int) {
+        val intent = Intent(this, MovieDetailsActivity::class.java)
+        intent.putExtra("movieId", movieId)
+        startActivity(intent)
     }
 }

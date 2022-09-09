@@ -4,6 +4,5 @@ enum class MovieModuleTypes {
     NOW_PLAYING,
     UPCOMING,
     TOP_RATED,
-    POPULAR,
-    SEARCH
+    POPULAR
 }

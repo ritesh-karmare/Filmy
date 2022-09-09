@@ -21,6 +21,7 @@ import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
 import rk.entertainment.filmy.data.models.moviesDetails.*
 import rk.entertainment.filmy.databinding.ActivityMovieDetailsBinding
+import rk.entertainment.filmy.ui.features.moviesListing.MovieClickListener
 import rk.entertainment.filmy.ui.features.moviesListing.MoviesListingAdapter
 import rk.entertainment.filmy.utils.ConnectionUtils
 import rk.entertainment.filmy.utils.DateTimeUtil.getHoursAndMinutes
@@ -31,7 +32,7 @@ import rk.entertainment.filmy.utils.UIUtils.dpToPx
 import rk.entertainment.filmy.utils.rvUtils.VerticalItemDecoration
 
 @AndroidEntryPoint
-class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
+class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener, MovieClickListener {
     // appbar scroll range
     private var scrollRange = -1
     private var isShowTitle = true
@@ -110,11 +111,7 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
             viewModel.getMovieDetails(movieId)
         } else
             displayMessage(
-                this,
-                true,
-                getString(R.string.no_internet_connection),
-                binding.clMovieDetails,
-                true
+                this, getString(R.string.no_internet_connection), binding.clMovieDetails
             )
     }
 
@@ -241,10 +238,14 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
 
     // Handle API error
     private fun errorMsg(errMsg: String) {
-        if (errMsg.isEmpty())
-            displayMessage(this, true, errMsg, binding.clMovieDetails, true)
+        if(errMsg.isEmpty())
+            displayMessage(this, errMsg, binding.clMovieDetails)
         else
-            displayMessage(this, true, getString(R.string.err_something_went_wrong), binding.clMovieDetails, true)
+            displayMessage(
+                this,
+                getString(R.string.err_something_went_wrong),
+                binding.clMovieDetails
+            )
     }
 
     // Handle the collapsible toolbar title
@@ -261,9 +262,15 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == android.R.id.home) {
+        if(id == android.R.id.home) {
             onBackPressed()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onMovieItemClicked(movieId: Int) {
+        val intent = Intent(this, MovieDetailsActivity::class.java)
+        intent.putExtra("movieId", movieId)
+        startActivity(intent)
     }
 }

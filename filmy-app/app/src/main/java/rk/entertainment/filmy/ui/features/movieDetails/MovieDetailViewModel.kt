@@ -1,7 +1,5 @@
 package rk.entertainment.filmy.ui.features.movieDetails
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,9 +7,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import rk.entertainment.filmy.data.network.ResultWrapper
 import rk.entertainment.filmy.domain.useCase.GetMovieDetailsUseCase
-import rk.entertainment.filmy.utils.RemoteErrorEmitter
-import rk.entertainment.filmy.utils.Resource
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,12 +22,12 @@ class MovieDetailViewModel @Inject constructor(private val getMovieDetailsUseCas
         getMovieDetailsUseCase(movieId)
             .onEach {
                 when (it) {
-                    is Resource.Loading ->
+                    is ResultWrapper.Loading ->
                         _movieDetailsStateFlow.emit(MovieDetailsState(loading = true))
-                    is Resource.Success ->
-                        _movieDetailsStateFlow.emit(MovieDetailsState(movieDetails = it.data))
-                    is Resource.Error ->
-                        _movieDetailsStateFlow.emit(MovieDetailsState(error = it.message))
+                    is ResultWrapper.Success ->
+                        _movieDetailsStateFlow.emit(MovieDetailsState(movieDetails = it.value))
+                    is ResultWrapper.Error ->
+                        _movieDetailsStateFlow.emit(MovieDetailsState(error = it.errorMessage))
                 }
             }.launchIn(viewModelScope)
     }

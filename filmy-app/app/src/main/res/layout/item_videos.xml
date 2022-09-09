@@ -11,27 +11,41 @@
         app:cardCornerRadius="@dimen/cardview_default_radius"
         app:cardElevation="@dimen/cardview_default_elevation">
 
-
-        <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <rk.entertainment.filmy.utils.customViews.PosterImageView
-            android:id="@+id/iv_video_poster"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:foreground="@drawable/gradient_overlay"
-            android:src="@drawable/loading" />
-
-        <ImageView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@android:drawable/ic_media_play" />
+            android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/iv_video_poster"
+                android:layout_width="150dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/loading"
+                app:layout_constraintDimensionRatio="w,4:3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </FrameLayout>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/gradient_overlay"
+                app:layout_constraintBottom_toBottomOf="@id/iv_video_poster"
+                app:layout_constraintEnd_toEndOf="@id/iv_video_poster"
+                app:layout_constraintStart_toStartOf="@id/iv_video_poster"
+                app:layout_constraintTop_toTopOf="@id/iv_video_poster" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/iv_video_poster"
+                app:layout_constraintEnd_toEndOf="@id/iv_video_poster"
+                app:layout_constraintStart_toStartOf="@id/iv_video_poster"
+                app:layout_constraintTop_toTopOf="@id/iv_video_poster"
+                app:srcCompat="@android:drawable/ic_media_play" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
 </layout>

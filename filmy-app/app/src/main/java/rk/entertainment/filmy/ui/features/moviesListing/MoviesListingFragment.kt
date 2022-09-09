@@ -1,19 +1,23 @@
 package rk.entertainment.filmy.ui.features.moviesListing
 
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.data.models.movieList.MoviesListData
 import rk.entertainment.filmy.databinding.FragmentMoviesListBinding
+import rk.entertainment.filmy.ui.features.movieDetails.MovieDetailsActivity
 import rk.entertainment.filmy.utils.ConnectionUtils
 import rk.entertainment.filmy.utils.Logs
 import rk.entertainment.filmy.utils.MovieModuleTypes
@@ -23,7 +27,7 @@ import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener
 import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration
 
 @AndroidEntryPoint
-class MoviesListingFragment : Fragment() {
+class MoviesListingFragment : Fragment(), MovieClickListener {
 
     private val TAG = "MoviesListingFragment"
 
@@ -32,7 +36,6 @@ class MoviesListingFragment : Fragment() {
 
     private lateinit var mGridLayoutManager: GridLayoutManager
     private lateinit var endlessRecyclerViewOnScrollListener: EndlessRecyclerViewOnScrollListener
-    private lateinit var mContext: Context
 
     private lateinit var binding: FragmentMoviesListBinding
     private lateinit var moviesListingViewModel: MoviesListingViewModel
@@ -42,7 +45,11 @@ class MoviesListingFragment : Fragment() {
         movieModuleType = arguments?.getSerializable(ARG_KEY) as MovieModuleTypes
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentMoviesListBinding.inflate(inflater)
         return binding.root
     }
@@ -59,8 +66,17 @@ class MoviesListingFragment : Fragment() {
         mGridLayoutManager = GridLayoutManager(getContext(), 2)
         binding.rvUpcomingMovies.layoutManager = mGridLayoutManager
         binding.rvUpcomingMovies.itemAnimator = DefaultItemAnimator()
-        binding.rvUpcomingMovies.addItemDecoration(GridSpacingItemDecoration(2, dpToPx(8f, mContext), true))
-        adapter = MoviesListingAdapter(mContext)
+        binding.rvUpcomingMovies.addItemDecoration(
+            GridSpacingItemDecoration(
+                2,
+                dpToPx(
+                    8f,
+                    requireContext()
+                ),
+                true
+            )
+        )
+        adapter = MoviesListingAdapter(this)
 
         binding.rvUpcomingMovies.adapter = adapter
     }
@@ -69,7 +85,9 @@ class MoviesListingFragment : Fragment() {
 
         binding.swipeRefreshUpcomingMovies.setOnRefreshListener { getMovies(true) }
 
-        binding.rvUpcomingMovies.addOnScrollListener(object : EndlessRecyclerViewOnScrollListener(mGridLayoutManager) {
+        binding.rvUpcomingMovies.addOnScrollListener(object : EndlessRecyclerViewOnScrollListener(
+            mGridLayoutManager
+        ) {
             override fun onLoadMore() {
                 toggleListenerLoading(true)
                 getMovies(false)
@@ -78,13 +96,29 @@ class MoviesListingFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        moviesListingViewModel = ViewModelProvider(this).get(movieModuleType.name, MoviesListingViewModel::class.java)
+        moviesListingViewModel =
+            ViewModelProvider(this).get(movieModuleType.name, MoviesListingViewModel::class.java)
         getMovies(false)
     }
 
     private fun initObservers() {
         try {
-            moviesListingViewModel.errorListener.observe(viewLifecycleOwner, { message: String -> errorMsg(message) })
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    moviesListingViewModel.movieListStateFlow.collect {
+
+                        if(!it.error.isNullOrEmpty())
+                            errorMsg(it.error)
+
+                        it.movieDetails?.let { movieListResponse ->
+                            if(movieListResponse.results.isNotEmpty()) {
+                                displayMoviesList(movieListResponse.results)
+                            }
+                        }
+                    }
+                }
+
+            }
         } catch (e: Exception) {
             Logs.logException(e)
         }
@@ -94,49 +128,36 @@ class MoviesListingFragment : Fragment() {
     private fun getMovies(isRefreshed: Boolean) {
         Logs.i(TAG, "getMovies " + movieModuleType.name)
 
-        if (ConnectionUtils.isNetworkAvailable()) {
-            if (isRefreshed) {
+        if(ConnectionUtils.isNetworkAvailable()) {
+            if(isRefreshed) {
                 adapter?.clear()
                 moviesListingViewModel.resetPage()
             }
             binding.swipeRefreshUpcomingMovies.isRefreshing = true
 
-            moviesListingViewModel.getMovies(movieModuleType, "").observe(viewLifecycleOwner, {
-                if (moviesListingViewModel.addMore())
-                    displayMoreMoviesList(it.results)
-                else
-                    displayMoviesList(it.results)
-            })
+            moviesListingViewModel.getMovies(movieModuleType)
 
         } else
-            displayMessage(mContext, true, getString(R.string.no_internet_connection), binding.swipeRefreshUpcomingMovies, true)
+            errorMsg(getString(R.string.no_internet_connection))
     }
 
     private fun displayMoviesList(upcomingMoviesList: List<MoviesListData>) {
+        adapter?.let {
+            if(it.itemCount > 0) {
+                toggleListenerLoading(false)
+                binding.rvUpcomingMovies.stopScroll()
+            }
+            it.addAll(upcomingMoviesList)
+        }
         dismissRefreshing()
-        loadAdapter(upcomingMoviesList)
-    }
-
-    private fun displayMoreMoviesList(upcomingMoviesList: List<MoviesListData>) {
-        dismissRefreshing()
-        toggleListenerLoading(false)
-        loadAdapter(upcomingMoviesList)
-        binding.rvUpcomingMovies.stopScroll()
     }
 
     // Handle API error
-    private fun errorMsg(_message: String) {
-        var message = _message
+    private fun errorMsg(_message: String?) {
+        var message = _message ?: getString(R.string.err_something_went_wrong)
         dismissRefreshing()
         toggleListenerLoading(false)
-
-        if (TextUtils.isEmpty(message)) message = getString(R.string.err_something_went_wrong)
-        displayMessage(mContext, true, message, binding.swipeRefreshUpcomingMovies, true)
-    }
-
-    // Load the adapter with movie list
-    private fun loadAdapter(upcomingMoviesList: List<MoviesListData>) {
-        adapter?.addAll(upcomingMoviesList)
+        displayMessage(requireContext(), message, binding.swipeRefreshUpcomingMovies)
     }
 
     // Dismiss swipe refresh
@@ -149,11 +170,6 @@ class MoviesListingFragment : Fragment() {
         endlessRecyclerViewOnScrollListener.setLoading(isLoading)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        this.mContext = context
-    }
-
     companion object {
         private const val ARG_KEY = "moviesModuleType"
         fun newInstance(movieModuleType: MovieModuleTypes?): MoviesListingFragment {
@@ -163,5 +179,11 @@ class MoviesListingFragment : Fragment() {
             fragment.arguments = args
             return fragment
         }
+    }
+
+    override fun onMovieItemClicked(movieId: Int) {
+        val intent = Intent(requireContext(), MovieDetailsActivity::class.java)
+        intent.putExtra("movieId", movieId)
+        startActivity(intent)
     }
 }

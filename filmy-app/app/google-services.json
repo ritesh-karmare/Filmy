@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "908969996253-tcndra949uudjo6s1hni6o4karqt1nnp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "rk.entertainment.filmy",
+            "certificate_hash": "46e3c834b742b79ae62c89d824d5c1da9904a1ee"
+          }
+        },
+        {
+          "client_id": "908969996253-te59sj5mmjekg9qq7bs9cgalv8oa29b5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "rk.entertainment.filmy",
+            "certificate_hash": "546ad5570e905bac1af95df4add45da8e24e6673"
+          }
+        },
+        {
           "client_id": "908969996253-nhl0dsbmehbcgusrf2dph8b8395khod3.apps.googleusercontent.com",
           "client_type": 3
         }

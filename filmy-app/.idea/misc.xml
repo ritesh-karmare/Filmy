@@ -8,6 +8,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/gradient_overlay.xml" value="0.179" />
         <entry key="app/src/main/res/layout/activity_movie_details.xml" value="0.1203125" />
         <entry key="app/src/main/res/layout/activity_movies_main.xml" value="0.1203125" />
         <entry key="app/src/main/res/layout/activity_search.xml" value="0.1203125" />
@@ -15,6 +16,7 @@
         <entry key="app/src/main/res/layout/fragment_movies_list.xml" value="0.1203125" />
         <entry key="app/src/main/res/layout/item_movie.xml" value="0.1203125" />
         <entry key="app/src/main/res/layout/item_videos.xml" value="0.1203125" />
+        <entry key="app/src/main/res/xml/network_security_config.xml" value="0.1" />
       </map>
     </option>
   </component>
