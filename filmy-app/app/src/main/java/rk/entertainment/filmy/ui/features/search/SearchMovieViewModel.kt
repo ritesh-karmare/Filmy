@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import rk.entertainment.filmy.data.network.ResultWrapper
+import rk.entertainment.filmy.data.network.Resource
 import rk.entertainment.filmy.domain.useCase.SearchMovieUseCase
 import rk.entertainment.filmy.ui.features.moviesListing.MovieListState
 import rk.entertainment.filmy.utils.Logs
@@ -37,16 +37,16 @@ class SearchMovieViewModel @Inject constructor(private val searchMovieUseCase: S
 
             when (it) {
 
-                is ResultWrapper.Loading -> {
+                is Resource.Loading -> {
                     _movieListStateFlow.emit(MovieListState(loading = true))
                 }
 
-                is ResultWrapper.Error -> {
+                is Resource.Error -> {
                     _movieListStateFlow.emit(MovieListState(error = it.errorMessage))
                     handlePageOffset(false)
                 }
 
-                is ResultWrapper.Success -> {
+                is Resource.Success -> {
                     totalPages = it.value.totalPages
                     Logs.i(TAG, "page:$page totalPages:$totalPages  onSuccess")
                     _movieListStateFlow.emit(MovieListState(movieDetails = it.value))

@@ -10,7 +10,7 @@ import javax.inject.Inject
 class GetMoviesListUseCase @Inject constructor(private val repository: MoviesRepository) {
 
     operator fun invoke(moduleTypes: MovieModuleTypes, pageNo: Int)
-            : Flow<ResultWrapper<MoviesListResponse>> {
+            : Flow<Resource<MoviesListResponse>> {
 
         return flowApiCall {
 

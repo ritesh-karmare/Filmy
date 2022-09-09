@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import rk.entertainment.filmy.data.network.ResultWrapper
+import rk.entertainment.filmy.data.network.Resource
 import rk.entertainment.filmy.domain.useCase.GetMovieDetailsUseCase
 import javax.inject.Inject
 
@@ -22,11 +22,11 @@ class MovieDetailViewModel @Inject constructor(private val getMovieDetailsUseCas
         getMovieDetailsUseCase(movieId)
             .onEach {
                 when (it) {
-                    is ResultWrapper.Loading ->
+                    is Resource.Loading ->
                         _movieDetailsStateFlow.emit(MovieDetailsState(loading = true))
-                    is ResultWrapper.Success ->
+                    is Resource.Success ->
                         _movieDetailsStateFlow.emit(MovieDetailsState(movieDetails = it.value))
-                    is ResultWrapper.Error ->
+                    is Resource.Error ->
                         _movieDetailsStateFlow.emit(MovieDetailsState(error = it.errorMessage))
                 }
             }.launchIn(viewModelScope)

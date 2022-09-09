@@ -17,70 +17,70 @@ import java.net.SocketTimeoutException
  * on 31/07/21
  */
 
-sealed class ResultWrapper<out T> {
-    object Loading : ResultWrapper<Nothing>()
-    data class Success<out T>(val value: T) : ResultWrapper<T>()
+sealed class Resource<out T> {
+    object Loading : Resource<Nothing>()
+    data class Success<out T>(val value: T) : Resource<T>()
     data class Error(val throwable: Throwable? = null, val errorMessage: String? = null) :
-        ResultWrapper<Nothing>()
+        Resource<Nothing>()
 }
 
 suspend fun <T> coroutineApiCall(
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
     apiCall: suspend () -> T
-): ResultWrapper<T> {
+): Resource<T> {
 
     return withContext(dispatcher) {
         try {
-            ResultWrapper.Success(apiCall.invoke())
+            Resource.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
             Logs.logException(throwable)
 
             when (throwable) {
                 is SocketTimeoutException -> {
-                    ResultWrapper.Error(throwable, ErrorType.TIMEOUT.displayName)
+                    Resource.Error(throwable, ErrorType.TIMEOUT.displayName)
                 }
 
                 is IOException -> {
-                    ResultWrapper.Error(throwable, ErrorType.NETWORK.displayName)
+                    Resource.Error(throwable, ErrorType.NETWORK.displayName)
                 }
 
                 is HttpException -> {
                     val errorResponse = convertErrorBody(throwable)
-                    ResultWrapper.Error(throwable, errorResponse)
+                    Resource.Error(throwable, errorResponse)
                 }
 
                 else -> {
-                    ResultWrapper.Error(throwable, ErrorType.UNKNOWN.displayName)
+                    Resource.Error(throwable, ErrorType.UNKNOWN.displayName)
                 }
             }
         }
     }
 }
 
-fun <T> flowApiCall(apiCall: suspend () -> T): Flow<ResultWrapper<T>> {
+fun <T> flowApiCall(apiCall: suspend () -> T): Flow<Resource<T>> {
     return flow {
         try {
-            emit(ResultWrapper.Loading)
-            emit(ResultWrapper.Success(apiCall.invoke()))
+            emit(Resource.Loading)
+            emit(Resource.Success(apiCall.invoke()))
         } catch (throwable: Throwable) {
             Logs.logException(throwable)
 
             when (throwable) {
                 is SocketTimeoutException -> {
-                    emit(ResultWrapper.Error(throwable, ErrorType.TIMEOUT.displayName))
+                    emit(Resource.Error(throwable, ErrorType.TIMEOUT.displayName))
                 }
 
                 is IOException -> {
-                    emit(ResultWrapper.Error(throwable, ErrorType.NETWORK.displayName))
+                    emit(Resource.Error(throwable, ErrorType.NETWORK.displayName))
                 }
 
                 is HttpException -> {
                     val errorResponse = convertErrorBody(throwable)
-                    emit(ResultWrapper.Error(throwable, errorResponse))
+                    emit(Resource.Error(throwable, errorResponse))
                 }
 
                 else -> {
-                    emit(ResultWrapper.Error(throwable, ErrorType.UNKNOWN.displayName))
+                    emit(Resource.Error(throwable, ErrorType.UNKNOWN.displayName))
                 }
             }
         }
