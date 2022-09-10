@@ -108,8 +108,11 @@ class SearchActivity : AppCompatActivity(), MovieClickListener {
 
                     it.movieDetails?.let { moviesListResponse ->
                         Logs.i("TAG", "searchMovies: movieListResponse")
-                        if(moviesListResponse.results.isNotEmpty())
+                        if(moviesListResponse.results.isNotEmpty()) {
                             displayMoviesList(moviesListResponse.results)
+                        }else{
+                            errorMsg(getString(R.string.no_movies_found))
+                        }
                     }
                 }
             }
