@@ -8,13 +8,13 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
-ext.versionMajor = 4
+ext.versionMajor = 5
 ext.versionMinor = 0
 ext.versionPatch = 0
 ext.versionClassifier = "dev"
 ext.isDevelopment = false
 ext.minimumSdkVersion = 21
-ext.targetSdkVersion = 28
+ext.targetSdkVersion = 32
 
 android {
 

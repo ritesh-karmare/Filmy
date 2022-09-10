@@ -326,8 +326,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimaryLight"
+                    android:clipToPadding="false"
                     android:orientation="horizontal"
+                    android:paddingLeft="12dp"
                     android:paddingTop="@dimen/spacing_4dp"
+                    android:paddingRight="12dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_videos" />
 
@@ -337,8 +340,8 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimaryLight"
                     android:fontFamily="sans-serif"
-                    android:paddingTop="@dimen/spacing_8dp"
                     android:paddingLeft="@dimen/spacing_16dp"
+                    android:paddingTop="@dimen/spacing_8dp"
                     android:paddingRight="@dimen/spacing_16dp"
                     android:text="@string/label_recommended"
                     android:textColor="@android:color/white"

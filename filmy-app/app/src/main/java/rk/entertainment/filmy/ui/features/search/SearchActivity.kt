@@ -19,10 +19,10 @@ import rk.entertainment.filmy.ui.features.movieDetails.MovieDetailsActivity
 import rk.entertainment.filmy.ui.features.moviesListing.MovieClickListener
 import rk.entertainment.filmy.ui.features.moviesListing.MoviesListingAdapter
 import rk.entertainment.filmy.utils.ConnectionUtils
+import rk.entertainment.filmy.utils.EndlessRecyclerViewOnScrollListener
 import rk.entertainment.filmy.utils.Logs
 import rk.entertainment.filmy.utils.UIUtils
 import rk.entertainment.filmy.utils.UIUtils.displayMessage
-import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener
 
 @AndroidEntryPoint
 class SearchActivity : AppCompatActivity(), MovieClickListener {

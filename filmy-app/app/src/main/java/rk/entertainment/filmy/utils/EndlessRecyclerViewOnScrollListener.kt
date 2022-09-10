@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.utils.rvUtils
+package rk.entertainment.filmy.utils
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView

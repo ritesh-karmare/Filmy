@@ -40,7 +40,6 @@ object NetworkModule {
         return logging
     }
 
-
     @Provides
     @Singleton
     fun provideOkHttpClient(

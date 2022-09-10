@@ -28,7 +28,6 @@ import rk.entertainment.filmy.utils.DateTimeUtil.getYearFromDate
 import rk.entertainment.filmy.utils.Logs
 import rk.entertainment.filmy.utils.UIUtils.displayMessage
 import rk.entertainment.filmy.utils.UIUtils.dpToPx
-import rk.entertainment.filmy.utils.rvUtils.VerticalItemDecoration
 
 @AndroidEntryPoint
 class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener, MovieClickListener {
@@ -212,7 +211,7 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener, Movie
     // Set videos thumbnail in the horizontal recyclerView
     private fun initVideos(videosList: ArrayList<VideosData>) {
         if(videosList.isNotEmpty()) {
-            binding.rvVideos.addItemDecoration(VerticalItemDecoration(this))
+            //binding.rvVideos.addItemDecoration(VerticalItemDecoration(this))
             val videosAdapter = VideosAdapter(this, videosList)
             binding.rvVideos.adapter = videosAdapter
         } else {

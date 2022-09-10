@@ -18,10 +18,10 @@ import rk.entertainment.filmy.data.models.movieList.MoviesListData
 import rk.entertainment.filmy.databinding.FragmentMoviesListBinding
 import rk.entertainment.filmy.ui.features.movieDetails.MovieDetailsActivity
 import rk.entertainment.filmy.utils.ConnectionUtils
+import rk.entertainment.filmy.utils.EndlessRecyclerViewOnScrollListener
 import rk.entertainment.filmy.utils.Logs
 import rk.entertainment.filmy.utils.MovieModuleTypes
 import rk.entertainment.filmy.utils.UIUtils.displayMessage
-import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener
 
 @AndroidEntryPoint
 class MoviesListingFragment : Fragment(), MovieClickListener {
