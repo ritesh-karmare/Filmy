@@ -59,15 +59,6 @@ class MoviesListingFragment : Fragment(), MovieClickListener {
     }
 
     private fun initReferences() {
-        //binding.rvUpcomingMovies.itemAnimator = DefaultItemAnimator()
-        /*binding.rvUpcomingMovies.addItemDecoration(
-            GridSpacingItemDecoration(
-                2,
-                dpToPx(8f, requireContext()),
-                true
-            )
-        )*/
-
         adapter = MoviesListingAdapter(requireContext(), this)
         binding.rvUpcomingMovies.adapter = adapter
     }
@@ -145,7 +136,7 @@ class MoviesListingFragment : Fragment(), MovieClickListener {
 
     // Handle API error
     private fun errorMsg(_message: String?) {
-        var message = _message ?: getString(R.string.err_something_went_wrong)
+        val message = _message ?: getString(R.string.err_something_went_wrong)
         dismissRefreshing()
         toggleListenerLoading(false)
         displayMessage(requireContext(), message, binding.swipeRefreshUpcomingMovies)
