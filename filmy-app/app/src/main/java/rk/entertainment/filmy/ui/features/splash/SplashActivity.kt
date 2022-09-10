@@ -2,8 +2,9 @@ package rk.entertainment.filmy.ui.features.splash
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.ui.features.moviesListing.MoviesListingActivity
 
@@ -15,11 +16,11 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun startHandler() {
-        val handler = Handler()
-        handler.postDelayed({
+        lifecycleScope.launchWhenCreated {
+            delay(1000)
             startActivity(Intent(this@SplashActivity, MoviesListingActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
-        }, 1000)
+        }
     }
 }

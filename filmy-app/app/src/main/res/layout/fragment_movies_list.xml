@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_upcoming_movies"
@@ -10,8 +12,12 @@
             android:id="@+id/rv_upcoming_movies"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="4dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:listitem="@layout/item_movie"
             android:clipToPadding="false"
-            android:paddingBottom="@dimen/spacing_8dp" />
+            />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

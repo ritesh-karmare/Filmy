@@ -1,5 +1,7 @@
 package rk.entertainment.filmy.ui.features.moviesListing
 
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -9,23 +11,54 @@ import rk.entertainment.filmy.data.models.movieList.MoviesListData
 import rk.entertainment.filmy.data.network.IMAGE_BASE_URL
 import rk.entertainment.filmy.data.network.POSTER_IMAGE_SIZE
 import rk.entertainment.filmy.databinding.ItemMovieBinding
+import rk.entertainment.filmy.databinding.ItemRecommendedMovieBinding
 import rk.entertainment.filmy.utils.GlideApp
 import rk.entertainment.filmy.utils.UIUtils
 
-class MoviesListingAdapter(val listener: MovieClickListener) :
-    RecyclerView.Adapter<MoviesListingAdapter.MoviesViewHolder>() {
+class MoviesListingAdapter(
+    val context: Context,
+    val listener: MovieClickListener, private val isFromMovieDetail: Boolean = false
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val moviesList = ArrayList<MoviesListData>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
-        val movieItemBinding =
-            ItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MoviesViewHolder(movieItemBinding)
+    val starDrawable: Drawable? by lazy {
+        ContextCompat.getDrawable(context, R.drawable.ic_star)
     }
 
-    override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
-        val data = moviesList[position]
-        holder.bind(data)
+    val px20: Int by lazy {
+        UIUtils.dpToPx(20f, context)
+    }
+
+    val drawableLoading: Int by lazy {
+        R.drawable.loading
+    }
+
+    val dp100: Int by lazy {
+        UIUtils.dpToPx(100f, context)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        var holder : RecyclerView.ViewHolder? = null
+        if(isFromMovieDetail){
+         val recommendedMovieBinding = ItemRecommendedMovieBinding.inflate(inflater,parent,false)
+         holder = RecommendedMoviesViewHolder(recommendedMovieBinding)
+        }else {
+            val movieItemBinding = ItemMovieBinding.inflate(inflater, parent, false)
+            holder = MoviesViewHolder(movieItemBinding)
+        }
+        return holder
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if(holder is MoviesViewHolder) {
+            val data = moviesList[position]
+            holder.bind(data)
+        } else if(holder is RecommendedMoviesViewHolder) {
+            val data = moviesList[position]
+            holder.bind(data)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -42,66 +75,80 @@ class MoviesListingAdapter(val listener: MovieClickListener) :
         notifyItemInserted(moviesList.size - 1)
     }
 
-    private fun remove(r: MoviesListData) {
-        val position = moviesList.indexOf(r)
-        if (position > -1) {
-            moviesList.removeAt(position)
-            notifyItemRemoved(position)
-        }
-    }
-
     //  Remove all elements from the list.
     fun clear() {
         moviesList.clear()
         notifyDataSetChanged()
-        // while (itemCount > 0) remove(item)
     }
-
-    private val item: MoviesListData
-        get() = moviesList[0]
 
     inner class MoviesViewHolder(val binding: ItemMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(data: MoviesListData) {
 
-            val context = binding.root.context
+            with(binding) {
 
-            val voteAverage = data.voteAverage?.toString()
-            val posterPath = data.posterPath
-            val posterUrl = IMAGE_BASE_URL + POSTER_IMAGE_SIZE + posterPath
+                val voteAverage = data.voteAverage.toString()
+                val posterPath = data.posterPath
+                val posterUrl = IMAGE_BASE_URL + POSTER_IMAGE_SIZE + posterPath
 
-            binding.tvMovieRating.text = voteAverage
+                this.tvMovieRating.text = voteAverage
 
-            if(posterPath != null) {
-                GlideApp.with(context)
-                    .load(posterUrl)
-                    .centerCrop()
-                    .placeholder(R.drawable.loading)
-                    .into(binding.ivMoviePoster)
+                if(posterPath != null) {
+                    GlideApp.with(context)
+                        .load(posterUrl)
+                        .centerCrop()
+                        .placeholder(drawableLoading)
+                        .into(this.ivMoviePoster)
+                } else
+                    this.ivMoviePoster.setImageResource(drawableLoading)
 
-            } else
-                binding.ivMoviePoster.setImageResource(R.drawable.loading)
+                val img = starDrawable
+                img?.setBounds(0, 0, px20, px20)
+                this.tvMovieRating.setCompoundDrawables(img, null, null, null)
 
-            val img = ContextCompat.getDrawable(context, R.drawable.ic_star)
-            img?.setBounds(
-                0, 0,
-                UIUtils.dpToPx(20f, context),
-                UIUtils.dpToPx(20f, context)
-            )
-
-            binding.tvMovieRating.setCompoundDrawables(img, null, null, null)
-
-            binding.cvItemMovie.setOnClickListener {
-                data.id?.let { listener.onMovieItemClicked(it) }
+                this.cvItemMovie.setOnClickListener {
+                    data.id?.let { listener.onMovieItemClicked(it) }
+                }
             }
-
-
         }
     }
+
+    inner class RecommendedMoviesViewHolder(val binding: ItemRecommendedMovieBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(data: MoviesListData) {
+
+            with(binding) {
+
+                val voteAverage = data.voteAverage.toString()
+                val posterPath = data.posterPath
+                val posterUrl = IMAGE_BASE_URL + POSTER_IMAGE_SIZE + posterPath
+
+                this.tvMovieRating.text = voteAverage
+
+                if(posterPath != null) {
+                    GlideApp.with(context)
+                        .load(posterUrl)
+                        .centerCrop()
+                        .placeholder(drawableLoading)
+                        .into(this.ivMoviePoster)
+                } else
+                    this.ivMoviePoster.setImageResource(drawableLoading)
+
+                val img = starDrawable
+                img?.setBounds(0, 0, px20, px20)
+                this.tvMovieRating.setCompoundDrawables(img, null, null, null)
+
+                this.cvItemMovie.setOnClickListener {
+                    data.id?.let { listener.onMovieItemClicked(it) }
+                }
+            }
+        }
+    }
+
 }
 
 interface MovieClickListener {
     fun onMovieItemClicked(movieId: Int)
 }
-

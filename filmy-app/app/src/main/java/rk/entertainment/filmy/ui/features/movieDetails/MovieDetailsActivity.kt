@@ -11,8 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +37,7 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener, Movie
     private var isShowTitle = true
     private var title: String? = null
     private var movieId: Int = 0
-    private var customPagerAdapter: CustomPagerAdapter? = null
+
     private var imageParam: LinearLayout.LayoutParams? = null
     private var indicators: ArrayList<ImageView>? = null
 
@@ -90,18 +89,15 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener, Movie
 
     private fun initReferences() {
         movieId = intent.getIntExtra("movieId", -1)
-        customPagerAdapter = CustomPagerAdapter(this, ArrayList())
-        binding.viewPager.adapter = customPagerAdapter
     }
 
     private fun initListeners() {
-        binding.viewPager.addOnPageChangeListener(object : OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                Logs.e("Selected_Page", position.toString())
                 updateIndicators(position)
             }
-
-            override fun onPageScrollStateChanged(state: Int) {}
         })
     }
 
@@ -137,7 +133,7 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener, Movie
             indicators?.add(imageIndicator)
             imageIndicator.setBackgroundResource(R.drawable.indicator_default)
         }
-        if (indicators!!.size > 0) indicators!![0].setBackgroundResource(R.drawable.indicator_selected)
+        if(indicators!!.size > 0) indicators!![0].setBackgroundResource(R.drawable.indicator_selected)
     }
 
     // Update the indicator to selected/default state on scroll of viewPager
@@ -153,26 +149,35 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener, Movie
 
     // Movie details main response method
     fun movieDetails(movieData: MovieDetailsRes) {
-        setUpMovieHeader(movieData.images.backdrops, movieData.title, movieData.genres, movieData.releaseDate, movieData.voteAverage.toString(), movieData.runtime)
+        setUpMovieHeader(
+            movieData.images.backdrops,
+            movieData.title,
+            movieData.genres,
+            movieData.releaseDate,
+            movieData.voteAverage,
+            movieData.runtime
+        )
         setUpOverView(movieData.overview)
         setUpMovieFacts(movieData.originalTitle, movieData.status, movieData.productionCompanies)
-        initVideos(movieData.videos.results)
+        initVideos(movieData.videos.results as ArrayList)
         initRecommendedMovies(movieData.recommendations.results)
     }
 
     // Set Images, title, genre, releaseDate, VoteAverage, Runtime
     private fun setUpMovieHeader(
         backdrops: List<BackdropData>, title: String, genres: List<GenreData>,
-        releaseDate: String, rating: String, runtime: Int
+        releaseDate: String, rating: Double, runtime: Int
     ) {
-        customPagerAdapter?.addAll(backdrops)
+        val customPagerAdapter = CustomPagerAdapter(this, backdrops as ArrayList)
+        binding.viewPager.adapter = customPagerAdapter
+
         initDots()
         addDots(backdrops.size)
         val releaseYear = getYearFromDate(releaseDate)
         this.title = title
         binding.tvMovieDetailsName.text = title
         binding.tvMovieDetailsYear.text = releaseYear
-        binding.tvMovieDetailsRating.text = rating
+        binding.tvMovieDetailsRating.text = String.format("%.1f", rating)
 
         if(!genres.isNullOrEmpty()) {
             val genre = genres.joinToString(",") { it.name } //getAppendedStringFromList(genres)
@@ -205,14 +210,10 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener, Movie
     }
 
     // Set videos thumbnail in the horizontal recyclerView
-    private fun initVideos(videosList: List<VideosData>) {
-        if (videosList.isNotEmpty()) {
-            val mLayoutManager = LinearLayoutManager(this)
-            mLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-            binding.rvVideos.layoutManager = mLayoutManager
+    private fun initVideos(videosList: ArrayList<VideosData>) {
+        if(videosList.isNotEmpty()) {
             binding.rvVideos.addItemDecoration(VerticalItemDecoration(this))
-            val videosAdapter = VideosAdapter(this)
-            videosAdapter.addAll(videosList)
+            val videosAdapter = VideosAdapter(this, videosList)
             binding.rvVideos.adapter = videosAdapter
         } else {
             binding.tvMovieDetailsVideos.visibility = View.GONE
@@ -222,12 +223,9 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener, Movie
 
     // Set recommended movies in the horizontal recyclerView
     private fun initRecommendedMovies(recommendationsList: List<MoviesListData>) {
-        if (recommendationsList.isNotEmpty()) {
-            val mLayoutManager = LinearLayoutManager(this)
-            mLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-            binding.rvRecommended.layoutManager = mLayoutManager
-            binding.rvRecommended.addItemDecoration(VerticalItemDecoration(this))
-            val moviesAdapter = MoviesListingAdapter(this)
+        if(recommendationsList.isNotEmpty()) {
+            //binding.rvRecommended.addItemDecoration(VerticalItemDecoration(this))
+            val moviesAdapter = MoviesListingAdapter(this, this,true)
             moviesAdapter.addAll(recommendationsList)
             binding.rvRecommended.adapter = moviesAdapter
         } else {
@@ -250,11 +248,11 @@ class MovieDetailsActivity : AppCompatActivity(), OnOffsetChangedListener, Movie
 
     // Handle the collapsible toolbar title
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-        if (scrollRange == -1) scrollRange = appBarLayout.totalScrollRange
-        if (scrollRange + verticalOffset == 0) {
+        if(scrollRange == -1) scrollRange = appBarLayout.totalScrollRange
+        if(scrollRange + verticalOffset == 0) {
             binding.collapsableToolbar.title = title
             isShowTitle = true
-        } else if (isShowTitle) {
+        } else if(isShowTitle) {
             binding.collapsableToolbar.title = " "
             isShowTitle = false
         }

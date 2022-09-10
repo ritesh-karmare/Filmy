@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv_item_video"
+        android:id="@+id/cv_item_movie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_4dp"
         android:foreground="@drawable/cardview_ripple"
         app:cardBackgroundColor="@color/colorAccent25"
         app:cardCornerRadius="@dimen/cardview_default_radius"
@@ -16,10 +18,9 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/iv_video_poster"
+                android:id="@+id/iv_movie_poster"
                 android:layout_width="120dp"
                 android:layout_height="0dp"
-                android:scaleType="centerCrop"
                 android:src="@drawable/loading"
                 app:layout_constraintDimensionRatio="w,4:3"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -30,22 +31,30 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/gradient_overlay"
-                app:layout_constraintBottom_toBottomOf="@id/iv_video_poster"
-                app:layout_constraintEnd_toEndOf="@id/iv_video_poster"
-                app:layout_constraintStart_toStartOf="@id/iv_video_poster"
-                app:layout_constraintTop_toTopOf="@id/iv_video_poster" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
+            <TextView
+                android:id="@+id/tv_movie_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@id/iv_video_poster"
-                app:layout_constraintEnd_toEndOf="@id/iv_video_poster"
-                app:layout_constraintStart_toStartOf="@id/iv_video_poster"
-                app:layout_constraintTop_toTopOf="@id/iv_video_poster"
-                app:srcCompat="@android:drawable/ic_media_play" />
+                android:layout_gravity="bottom|start"
+                android:layout_margin="@dimen/spacing_4dp"
+                android:drawablePadding="@dimen/spacing_2dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_vertical"
+                android:maxLength="3"
+                android:textColor="@android:color/white"
+                android:textStyle="normal"
+                app:drawableLeftCompat="@drawable/ic_star"
+                app:drawableStartCompat="@drawable/ic_star"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="2.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
-
 </layout>

@@ -12,6 +12,8 @@ class SearchMovieUseCase @Inject constructor(private val repository: MoviesRepos
     operator fun invoke(searchQuery: String, pageNo: Int)
             : Flow<Resource<MoviesListResponse>> {
 
-        return flowApiCall { repository.getSearchMovieData(searchQuery, pageNo) }
+        return flowApiCall {
+            repository.getSearchMovieData(searchQuery, pageNo)
+        }
     }
 }

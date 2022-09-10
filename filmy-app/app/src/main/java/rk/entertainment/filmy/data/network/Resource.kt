@@ -101,7 +101,6 @@ enum class ErrorType(val displayName: String) {
     UNKNOWN("Something went wrong") //Anything else
 }
 
-
 const val MESSAGE_KEY = "status_message"
 const val ERROR_KEY = "error"
 

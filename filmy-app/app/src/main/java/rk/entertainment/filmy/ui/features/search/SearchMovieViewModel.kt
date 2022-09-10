@@ -18,71 +18,47 @@ import javax.inject.Inject
 class SearchMovieViewModel @Inject constructor(private val searchMovieUseCase: SearchMovieUseCase) :
     ViewModel() {
 
-    private val TAG = "SearchMovieViewModel"
+    var page = 0
+        private set
 
-    private var page = 0
-    private var totalPages = 1
     private var previousSearchQuery = ""
 
     private val _movieListStateFlow = MutableStateFlow(MovieListState())
     val movieListStateFlow: StateFlow<MovieListState> = _movieListStateFlow
 
-    fun searchmovies(query: String) {
+    fun searchMovies(query: String) {
 
-        if(TextUtils.isEmpty(query)||!previousSearchQuery.equals(query)) resetPage()
+        if(TextUtils.isEmpty(query)||previousSearchQuery != query) resetPage()
         previousSearchQuery = query
 
         handlePageOffset(true)
         searchMovieUseCase(query, page).onEach {
 
             when (it) {
-
                 is Resource.Loading -> {
                     _movieListStateFlow.emit(MovieListState(loading = true))
                 }
 
                 is Resource.Error -> {
+                    Logs.i("TAG", "searchMovies: error")
                     _movieListStateFlow.emit(MovieListState(error = it.errorMessage))
                     handlePageOffset(false)
                 }
 
                 is Resource.Success -> {
-                    totalPages = it.value.totalPages
-                    Logs.i(TAG, "page:$page totalPages:$totalPages  onSuccess")
+                    Logs.i("TAG", "searchMovies: success")
                     _movieListStateFlow.emit(MovieListState(movieDetails = it.value))
                 }
             }
-
-
-            /*  when (it) {
-                  is Resource.Loading -> _movieListStateFlow.emit(MovieListState(loading = true))
-
-                  is Resource.Success -> {
-                      if(it.data != null) {
-                              totalPages = it.data.totalPages
-                          Logs.i(TAG, "page:$page totalPages:$totalPages  onSuccess")
-                          _movieListStateFlow.emit(MovieListState(movieDetails = it.data))
-                      } else {
-                          handlePageOffset(false)
-                      }
-                  }
-
-                  is Resource.Error -> {
-                      _movieListStateFlow.emit(MovieListState(error = it.message))
-                      handlePageOffset(false)
-                  }
-              }*/
-
         }.launchIn(viewModelScope)
     }
 
     // Increment/Decrement page offset for pagination
     private fun handlePageOffset(increment: Boolean) {
-        Logs.i(TAG, "page:$page totalPages:$totalPages")
-        if(increment) {
-            if(page < totalPages) page += 1
-        } else if(page > 1) page -= 1
-        Logs.i(TAG, "final page:$page totalPages:$totalPages")
+        if(increment)
+            page += 1
+        else if(page > 1)
+            page -= 1
     }
 
     private fun resetPage() {

@@ -8,9 +8,6 @@ import rk.entertainment.filmy.data.models.moviesDetails.MovieDetailsRes
 
 
 interface APIService {
-    /**
-     * GET Methods
-     */
 
     // Get movies List
     @GET("$ENDPOINT_MOVIE{type}")

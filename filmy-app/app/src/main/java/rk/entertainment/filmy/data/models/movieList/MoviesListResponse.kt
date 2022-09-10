@@ -1,17 +1,21 @@
 package rk.entertainment.filmy.data.models.movieList
 
-import com.google.gson.annotations.SerializedName
-
 data class MoviesListResponse(
-        @SerializedName("results")
-        var results: List<MoviesListData>,
+    var results: List<MoviesListData>,
+)
 
-        @SerializedName("page")
-        var page: Int,
-
-        @SerializedName("total_results")
-        var totalResults: Int,
-
-        @SerializedName("total_pages")
-        var totalPages: Int
+data class MoviesListData(
+    var voteCount: Int? = null,
+    var id: Int? = null,
+    var video: Boolean? = null,
+    var voteAverage: Double? = null,
+    var title: String? = null,
+    var posterPath: String? = null,
+    var originalLanguage: String? = null,
+    var originalTitle: String? = null,
+    var genreIds: List<Int>? = null,
+    var backdropPath: String? = null,
+    var adult: Boolean? = null,
+    var overview: String? = null,
+    var releaseDate: String? = null
 )

@@ -1,9 +1,7 @@
 package rk.entertainment.filmy.ui.features.search
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
@@ -11,7 +9,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -22,11 +19,10 @@ import rk.entertainment.filmy.ui.features.movieDetails.MovieDetailsActivity
 import rk.entertainment.filmy.ui.features.moviesListing.MovieClickListener
 import rk.entertainment.filmy.ui.features.moviesListing.MoviesListingAdapter
 import rk.entertainment.filmy.utils.ConnectionUtils
+import rk.entertainment.filmy.utils.Logs
 import rk.entertainment.filmy.utils.UIUtils
 import rk.entertainment.filmy.utils.UIUtils.displayMessage
-import rk.entertainment.filmy.utils.UIUtils.dpToPx
 import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener
-import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration
 
 @AndroidEntryPoint
 class SearchActivity : AppCompatActivity(), MovieClickListener {
@@ -60,25 +56,17 @@ class SearchActivity : AppCompatActivity(), MovieClickListener {
 
     private fun initRv() {
         binding.rvSearch.apply {
-            addItemDecoration(GridSpacingItemDecoration(2, dpToPx(8f, this@SearchActivity), true))
-            itemAnimator = DefaultItemAnimator()
-            this@SearchActivity.adapter = MoviesListingAdapter(this@SearchActivity)
+            this@SearchActivity.adapter =
+                MoviesListingAdapter(context = this@SearchActivity, listener = this@SearchActivity)
             adapter = this@SearchActivity.adapter
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+
     private fun initListeners() {
 
-        binding.etSearch.setOnTouchListener { view, motionEvent ->
-            if(motionEvent.action == MotionEvent.ACTION_UP) {
-
-                if(motionEvent.rawX >= binding.etSearch.right - binding.etSearch.compoundDrawables[2].bounds.width()) {
-                    binding.etSearch.setText("")
-                    return@setOnTouchListener true
-                }
-            }
-            return@setOnTouchListener false
+        binding.ivClose.setOnClickListener {
+            binding.etSearch.setText("")
         }
 
         binding.etSearch.doOnTextChanged { text, _, _, _ ->
@@ -114,10 +102,12 @@ class SearchActivity : AppCompatActivity(), MovieClickListener {
                     UIUtils.hideKeyboard(this@SearchActivity, binding.etSearch)
 
                     if(!it.error.isNullOrEmpty()) {
+                        Logs.i("TAG", "searchMovies: movieList error")
                         errorMsg(it.error)
                     }
 
                     it.movieDetails?.let { moviesListResponse ->
+                        Logs.i("TAG", "searchMovies: movieListResponse")
                         if(moviesListResponse.results.isNotEmpty())
                             displayMoviesList(moviesListResponse.results)
                     }
@@ -135,13 +125,17 @@ class SearchActivity : AppCompatActivity(), MovieClickListener {
     // trigger presenter to get movies for searched query
     private fun getMovies() {
         if(ConnectionUtils.isNetworkAvailable()) {
-            searchMovieViewModel?.searchmovies(query!!)
+            searchMovieViewModel?.searchMovies(query!!)
         } else
             errorMsg(getString(R.string.no_internet_connection))
     }
 
     private fun displayMoviesList(upcomingMoviesList: List<MoviesListData>) {
         adapter?.let {
+
+            if(searchMovieViewModel?.page == 1)
+                it.clear()
+
             if(it.itemCount > 0) {
                 toggleListenerLoading(false)
                 binding.rvSearch.stopScroll()
@@ -157,7 +151,7 @@ class SearchActivity : AppCompatActivity(), MovieClickListener {
         displayMessage(this@SearchActivity, msg, binding.clSearch)
     }
 
-    // Set the ScrollListener to true\false when end of recyclerview reached for loading more data
+    // Set the ScrollListener to true/false when end of recyclerview reached for loading more data
     private fun toggleListenerLoading(isLoading: Boolean) {
         endlessRecyclerViewOnScrollListener!!.setLoading(isLoading)
     }

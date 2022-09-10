@@ -10,7 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -22,9 +21,7 @@ import rk.entertainment.filmy.utils.ConnectionUtils
 import rk.entertainment.filmy.utils.Logs
 import rk.entertainment.filmy.utils.MovieModuleTypes
 import rk.entertainment.filmy.utils.UIUtils.displayMessage
-import rk.entertainment.filmy.utils.UIUtils.dpToPx
 import rk.entertainment.filmy.utils.rvUtils.EndlessRecyclerViewOnScrollListener
-import rk.entertainment.filmy.utils.rvUtils.GridSpacingItemDecoration
 
 @AndroidEntryPoint
 class MoviesListingFragment : Fragment(), MovieClickListener {
@@ -34,7 +31,6 @@ class MoviesListingFragment : Fragment(), MovieClickListener {
     private var movieModuleType = MovieModuleTypes.UPCOMING
     private var adapter: MoviesListingAdapter? = null
 
-    private lateinit var mGridLayoutManager: GridLayoutManager
     private lateinit var endlessRecyclerViewOnScrollListener: EndlessRecyclerViewOnScrollListener
 
     private lateinit var binding: FragmentMoviesListBinding
@@ -63,21 +59,16 @@ class MoviesListingFragment : Fragment(), MovieClickListener {
     }
 
     private fun initReferences() {
-        mGridLayoutManager = GridLayoutManager(getContext(), 2)
-        binding.rvUpcomingMovies.layoutManager = mGridLayoutManager
-        binding.rvUpcomingMovies.itemAnimator = DefaultItemAnimator()
-        binding.rvUpcomingMovies.addItemDecoration(
+        //binding.rvUpcomingMovies.itemAnimator = DefaultItemAnimator()
+        /*binding.rvUpcomingMovies.addItemDecoration(
             GridSpacingItemDecoration(
                 2,
-                dpToPx(
-                    8f,
-                    requireContext()
-                ),
+                dpToPx(8f, requireContext()),
                 true
             )
-        )
-        adapter = MoviesListingAdapter(this)
+        )*/
 
+        adapter = MoviesListingAdapter(requireContext(), this)
         binding.rvUpcomingMovies.adapter = adapter
     }
 
@@ -86,7 +77,7 @@ class MoviesListingFragment : Fragment(), MovieClickListener {
         binding.swipeRefreshUpcomingMovies.setOnRefreshListener { getMovies(true) }
 
         binding.rvUpcomingMovies.addOnScrollListener(object : EndlessRecyclerViewOnScrollListener(
-            mGridLayoutManager
+            binding.rvUpcomingMovies.layoutManager as GridLayoutManager
         ) {
             override fun onLoadMore() {
                 toggleListenerLoading(true)

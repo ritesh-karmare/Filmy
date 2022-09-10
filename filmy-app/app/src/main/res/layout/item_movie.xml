@@ -7,6 +7,7 @@
         android:id="@+id/cv_item_movie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_4dp"
         android:foreground="@drawable/cardview_ripple"
         app:cardBackgroundColor="@color/colorAccent25"
         app:cardCornerRadius="@dimen/cardview_default_radius"
@@ -54,36 +55,6 @@
                 tools:text="2.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!--<FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <rk.entertainment.filmy.utils.customViews.PosterImageView
-                android:id="@+id/iv_movie_poster"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-            android:foreground="@drawable/gradient_overlay"
-            android:src="@drawable/loading" />
-
-        <TextView
-            android:id="@+id/tv_movie_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
-            android:layout_margin="@dimen/spacing_4dp"
-            android:drawableStart="@drawable/ic_star"
-            android:drawableLeft="@drawable/ic_star"
-            android:drawablePadding="@dimen/spacing_2dp"
-            android:fontFamily="sans-serif-medium"
-            android:maxLength="3"
-            android:gravity="center_vertical"
-            android:textColor="@android:color/white"
-            android:textStyle="normal"
-            tools:text="2.5" />
-
-        </FrameLayout>-->
 
     </com.google.android.material.card.MaterialCardView>
 </layout>

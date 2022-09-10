@@ -2,7 +2,8 @@ package rk.entertainment.filmy.domain.useCase
 
 import kotlinx.coroutines.flow.Flow
 import rk.entertainment.filmy.data.models.movieList.MoviesListResponse
-import rk.entertainment.filmy.data.network.*
+import rk.entertainment.filmy.data.network.Resource
+import rk.entertainment.filmy.data.network.flowApiCall
 import rk.entertainment.filmy.domain.repository.MoviesRepository
 import rk.entertainment.filmy.utils.MovieModuleTypes
 import javax.inject.Inject
@@ -14,7 +15,10 @@ class GetMoviesListUseCase @Inject constructor(private val repository: MoviesRep
 
         return flowApiCall {
 
-            val category = when (moduleTypes) {
+            val data = repository.getSearchMovieData("rock",pageNo)
+            data
+
+           /* val category = when (moduleTypes) {
                 MovieModuleTypes.NOW_PLAYING -> {
                     ENDPOINT_NOW_PLAYING
                 }
@@ -29,7 +33,7 @@ class GetMoviesListUseCase @Inject constructor(private val repository: MoviesRep
                 }
             }
 
-            repository.getMoviesListing(category, pageNo)
+            repository.getMoviesListing(category, pageNo)*/
         }
     }
 }

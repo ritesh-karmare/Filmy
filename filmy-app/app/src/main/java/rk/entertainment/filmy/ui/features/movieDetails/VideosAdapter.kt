@@ -11,9 +11,8 @@ import rk.entertainment.filmy.data.models.moviesDetails.VideosData
 import rk.entertainment.filmy.databinding.ItemVideosBinding
 import rk.entertainment.filmy.utils.GlideApp
 
-class VideosAdapter(private val activity: Activity) : RecyclerView.Adapter<VideosViewHolder>() {
-
-    private val videosDataList: ArrayList<VideosData> = ArrayList()
+class VideosAdapter(private val activity: Activity, private val videosList: ArrayList<VideosData>) :
+    RecyclerView.Adapter<VideosViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideosViewHolder {
         val binding = ItemVideosBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,59 +20,50 @@ class VideosAdapter(private val activity: Activity) : RecyclerView.Adapter<Video
     }
 
     override fun onBindViewHolder(holder: VideosViewHolder, position: Int) {
-        val data = videosDataList[position]
+        val data = videosList[position]
         val videoKey = data.key
 
-        if (videoKey != null) {
+        if(videoKey != null) {
             val videoPosterUrl = "https://img.youtube.com/vi/$videoKey/mqdefault.jpg"
             GlideApp.with(activity)
-                    .load(videoPosterUrl)
-                    .centerCrop()
-                    .placeholder(R.drawable.loading)
-                    .into(holder.binding.ivVideoPoster)
+                .load(videoPosterUrl)
+                .centerCrop()
+                .placeholder(R.drawable.loading)
+                .into(holder.binding.ivVideoPoster)
         } else
             holder.binding.ivVideoPoster.setImageResource(R.drawable.loading)
 
         holder.binding.cvItemVideo.setOnClickListener {
-            val clickedData = videosDataList[position]
-            if (clickedData.key != null)
-                activity.startActivity(Intent(activity, TrailerActivity::class.java).putExtra("video_id", clickedData.key))
+            val clickedData = videosList[position]
+            if(clickedData.key != null)
+                activity.startActivity(
+                    Intent(
+                        activity,
+                        TrailerActivity::class.java
+                    ).putExtra("video_id", clickedData.key)
+                )
             else
-                Toast.makeText(activity, activity.getString(R.string.error_video_unavailable), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    activity,
+                    activity.getString(R.string.error_video_unavailable),
+                    Toast.LENGTH_SHORT
+                ).show()
         }
     }
 
     override fun getItemCount(): Int {
-        return videosDataList.size
+        return videosList.size
     }
 
     fun add(r: VideosData) {
-        videosDataList.add(r)
-        notifyItemInserted(videosDataList.size - 1)
+        videosList.add(r)
+        notifyItemInserted(videosList.size - 1)
     }
 
     fun addAll(moveResults: List<VideosData>?) {
-        videosDataList.addAll(moveResults!!)
-        notifyItemInserted(videosDataList.size - 1)
+        videosList.addAll(moveResults!!)
+        notifyItemInserted(videosList.size - 1)
     }
-
-    private fun remove(r: VideosData) {
-        val position = videosDataList.indexOf(r)
-        if (position > -1) {
-            videosDataList.removeAt(position)
-            notifyItemRemoved(position)
-        }
-    }
-
-    //  Remove all elements from the list.
-    fun clear() {
-        while (itemCount > 0) {
-            remove(item)
-        }
-    }
-
-    private val item: VideosData
-        get() = videosDataList[0]
 }
 
 class VideosViewHolder(val binding: ItemVideosBinding) : RecyclerView.ViewHolder(binding.root)

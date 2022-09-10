@@ -1,5 +1,7 @@
 package rk.entertainment.filmy.hilt
 
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -56,12 +58,24 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideGsonConverterFactory(): GsonConverterFactory {
+        val gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create()
+
+        return GsonConverterFactory.create(gson)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ): Retrofit {
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(gsonConverterFactory)
             .build()
     }
 

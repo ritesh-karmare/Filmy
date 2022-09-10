@@ -1,7 +1,6 @@
 package rk.entertainment.filmy.utils
 
 import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 
 object DateTimeUtil {
@@ -10,11 +9,7 @@ object DateTimeUtil {
     @JvmStatic
     fun getYearFromDate(releaseDate: String?): String? {
         return try {
-            if (releaseDate.isNullOrEmpty()) return ""
-            val myDate: Calendar = GregorianCalendar()
-            val theDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(releaseDate)
-            myDate.time = theDate
-            myDate[Calendar.YEAR].toString()
+            releaseDate?.substring(0, 4) ?: ""
         } catch (e: ParseException) {
             Logs.logException(e)
             releaseDate
