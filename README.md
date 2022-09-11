@@ -38,10 +38,10 @@ Filmy: The fastest and easiest way to discover movies on your device. All the mo
 # Change Log
 
 * **v5.0.0 - 12 September, 2022** <br>
- * Recommended Movies'
+  * Recommended Movies'
 
 * v2.0.0 - 06 November, 2018 <br>
- * Now you can watch 'trailers'
+  * Now you can watch 'trailers'
 
 * v1.0.0 - 28 August, 2018 <br>
   * Categorized list of Now playing, Upcoming, Top Rated, Popular movies.
