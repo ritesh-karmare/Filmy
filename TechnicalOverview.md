@@ -30,8 +30,8 @@
 
 |      SDK           |      Version            |
 |  :---------------  |  :--------------------  |
-|  **Minimum**       |  16 (Android 4.1).      |
-|  **Target**        |  27 (Android 8.1)       |
+|  **Minimum**       |  Android 21             |
+|  **Target**        |  Android 32             |
 
 
 # Libraries
