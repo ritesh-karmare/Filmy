@@ -12,19 +12,19 @@
 # Project Structure
 
 <p align="center">
-  <img src="/screenshots/project_structure.PNG"/> 
+  <img src="/screenshots/project_structure.png"/> 
 </p>
 
 
 # Enviroment
 
-|                    |                         |
-|  ----------------  |  ---------------------  |
-|  **IDE**           |  Android Studio v3.1.4  |
-|  **SDK**           |  Android SDK            |
-|  **Build Tool**    |  v27.0.3                |
-|  **Language**      |  Java, XML              |
-|  **Architecture**  |  MVP                    |
+|                    |                              |
+|  ----------------  |  --------------------------  |
+|  **IDE**           |  Android Studio v3.1.4       |
+|  **SDK**           |  Android SDK                 |
+|  **Build Tool**    |  v27.0.3                     |
+|  **Language**      |  Kotlin, XML                 |
+|  **Architecture**  |  Clean Architecture + MVVM   |
 
 # Compatibility
 
@@ -41,14 +41,12 @@
 |  1. **Retrofit**       |  REST Client. It makes it relatively easy to retrieve and upload JSON via a REST based webservice  |
 |  2. **OkHttp**         |  Set timeouts and logging intercepters  |
 |  3. **Gson**           |  Parse JSON to Java Objects and vice versa.  |
-|  4. **RxJava**		     |  Enables reactive programming to handle asynchronous task and <br>avoid "Callback Hell" using Observable and                             Observer patterns.</br>  |
-|  5. **Glide**		       |  Loads remote images effectively and provides caching mechanism for the same.  |
-|  6. **ButterKnife**	   |  View binding framework. No more findViewById! <br>resulting in lesser code and lesser development time</br>  |
-|  7. **Timber**		     |  Logging library, an abstraction over android's logging interface, <br>provides feature of enabling and                                  </br>disabling logs for development and release builds respectively.  |
-|  8. **Crashlytics**    |  Track the crashes app-wide  |
-|  9. **Firebase Analytics**    |  Track the analytics of the app usage and behaviour  |
-|  10. **Firebase Performance**    |  Track app performance  |
-|  11. **Youtube Data v3**    |  To play youtube videos  |
+|  4. **Glide**		       |  Loads remote images effectively and provides caching mechanism for the same.  |
+|  5. **Hilt**		       |  Reduces the boilerplate code of doing manual dependency injection.  |
+|  6. **Crashlytics**    |  Track the crashes app-wide  |
+|  7. **Firebase Analytics**    |  Track the analytics of the app usage and behaviour  |
+|  8. **Firebase Performance**    |  Track app performance  |
+|  9. **Youtube Data v3**    |  To play youtube videos  |
 
 
 # UI Components
@@ -63,13 +61,6 @@
 |  6. **CollapsingToolbarLayout** |  To contain viewpager and parallex effect |
 
 
-# Technical implementation pipeline
-
-1. Dagger as dependency injection
-2. Architecture improvement
-3. Unit Testing using JUnit & Espresso
-
-
 # Credits & References 
 
  [Retrofit](https://www.journaldev.com/13639/retrofit-android-example-tutorial)
@@ -80,7 +71,7 @@
 <br> [Crashlytics](https://fabric.io/kits/android/crashlytics)
 <br> [Securing ````API_KEY````](https://medium.com/code-better/hiding-api-keys-from-your-android-repository-b23f5598b906)
 <br> [Semantic App Versioning](https://medium.com/@maxirosson/versioning-android-apps-d6ec171cfd82)
-<br><br> and whatever seems helpful...
+<br><br> and whatever seemed helpful...
 
 <br>
 <br>
