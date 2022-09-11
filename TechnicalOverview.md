@@ -63,10 +63,7 @@
 # Credits & References 
 
  [Retrofit](https://www.journaldev.com/13639/retrofit-android-example-tutorial)
-<br> [RxJava](https://www.toptal.com/android/functional-reactive-android-rxjava)
 <br> [Glide](https://github.com/codepath/android_guides/wiki/Displaying-Images-with-the-Glide-Library)
-<br> [ButterKnife](http://jakewharton.github.io/butterknife/)
-<br> [Timber](https://medium.com/@caueferreira/timber-enhancing-your-logging-experience-330e8af97341)
 <br> [Crashlytics](https://fabric.io/kits/android/crashlytics)
 <br> [Securing ````API_KEY````](https://medium.com/code-better/hiding-api-keys-from-your-android-repository-b23f5598b906)
 <br> [Semantic App Versioning](https://medium.com/@maxirosson/versioning-android-apps-d6ec171cfd82)
