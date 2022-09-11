@@ -15,16 +15,6 @@ Filmy: The fastest and easiest way to discover movies on your device. All the mo
 
 # [Technical trailer](/TechnicalOverview.md)
 
-# Features 
-
-* Categorized list of Now playing, Upcoming, Top Rated, Popular movies.
-* Movie rating
-* Movie details along with backdrop images(movie scenes)
-* Search for a movie
-* Watch trailers
-* Recommended movies
-
-
 # Goal
 
 * To showcase the implementation of:
@@ -34,6 +24,15 @@ Filmy: The fastest and easiest way to discover movies on your device. All the mo
 * To achieve this, I am using TMDb (The Movie Database) as a source to retrieve the data (movie information) over the network via REST APIs.
 * Therefore, this project can be considered as a ***concept project***.
 
+
+# Features 
+
+* Categorized list of Now playing, Upcoming, Top Rated, Popular movies.
+* Movie rating
+* Movie details along with backdrop images(movie scenes)
+* Search for a movie
+* Watch trailers
+* Recommended movies
 
 # Change Log
 
