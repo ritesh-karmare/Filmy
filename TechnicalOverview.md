@@ -12,7 +12,7 @@
 # Project Structure
 
 <p align="center">
-  <img src="/screenshots/project_structure.png"/> 
+  <img src="/screenshots/project_structure.png" width=250px height=500px /> 
 </p>
 
 
