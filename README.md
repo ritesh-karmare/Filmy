@@ -1,6 +1,6 @@
 # Filmy 
 
-[![Version](https://img.shields.io/badge/version-v2.0.0-brightgreen.svg)](https://play.google.com/store/apps/details?id=rk.entertainment.filmy)
+[![Version](https://img.shields.io/badge/version-v5.0.0-brightgreen.svg)](https://play.google.com/store/apps/details?id=rk.entertainment.filmy)
 [![License](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg)](https://raw.githubusercontent.com/ritesh-karmare/Test/master/LICENSE)
 
 ![](/screenshots/filmy_banner.png)
@@ -22,28 +22,23 @@ Filmy: The fastest and easiest way to discover movies on your device. All the mo
 * Movie details along with backdrop images(movie scenes)
 * Search for a movie
 * Watch trailers
-
-
-# Upcoming Features
-
-1. Get movie reviews
-2. Register/Login to TMDb
-3. Shortlist favorite movies
-4. Rate a Movie
-5. Give reviews
+* Recommended movies
 
 
 # Goal
 
 * To showcase the implementation of:
-1. Various libraries in Android that includes Retrofit, OkHttp, Glide, RxJava, Timber, ButterKnife and few more.
-2. MVP architecture
-3. Material UI
+1. 3rd party libraries in Android that includes: Retrofit, OkHttp, Glide, Hilt, etc...
+2. Clean Architecture with Kotlin & MVVM
+
 * To achieve this, I am using TMDb (The Movie Database) as a source to retrieve the data (movie information) over the network via REST APIs.
 * Therefore, this project can be considered as a ***concept project***.
 
 
 # Change Log
+
+**v2.0.0 - 12 September, 2022** <br>
+* Recommended Movies'
 
 **v2.0.0 - 06 November, 2018** <br>
 * Now you can watch 'trailers'
