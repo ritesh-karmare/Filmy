@@ -20,9 +20,8 @@
 
 |                    |                              |
 |  ----------------  |  --------------------------  |
-|  **IDE**           |  Android Studio v3.1.4       |
+|  **IDE**           |  Android Studio Chipmunk     |
 |  **SDK**           |  Android SDK                 |
-|  **Build Tool**    |  v27.0.3                     |
 |  **Language**      |  Kotlin, XML                 |
 |  **Architecture**  |  Clean Architecture + MVVM   |
 
