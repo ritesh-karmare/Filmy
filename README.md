@@ -28,8 +28,8 @@ Filmy: The fastest and easiest way to discover movies on your device. All the mo
 # Goal
 
 * To showcase the implementation of:
-1. 3rd party libraries in Android that includes: Retrofit, OkHttp, Glide, Hilt, etc...
-2. Clean Architecture with Kotlin & MVVM
+  1. 3rd party libraries in Android that includes: Retrofit, OkHttp, Glide, Hilt, etc...
+  2. Clean Architecture with Kotlin & MVVM
 
 * To achieve this, I am using TMDb (The Movie Database) as a source to retrieve the data (movie information) over the network via REST APIs.
 * Therefore, this project can be considered as a ***concept project***.
@@ -37,17 +37,17 @@ Filmy: The fastest and easiest way to discover movies on your device. All the mo
 
 # Change Log
 
-**v2.0.0 - 12 September, 2022** <br>
-* Recommended Movies'
+* **v5.0.0 - 12 September, 2022** <br>
+ * Recommended Movies'
 
-**v2.0.0 - 06 November, 2018** <br>
-* Now you can watch 'trailers'
+* v2.0.0 - 06 November, 2018 <br>
+ * Now you can watch 'trailers'
 
-**v1.0.0 - 28 August, 2018** <br>
-* Categorized list of Now playing, Upcoming, Top Rated, Popular movies.
-* Movie rating
-* Movie details along with backdrop images(movie scenes)
-* Search for a movie
+* v1.0.0 - 28 August, 2018 <br>
+  * Categorized list of Now playing, Upcoming, Top Rated, Popular movies.
+  * Movie rating
+  * Movie details along with backdrop images(movie scenes)
+  * Search for a movie
 
 
 
