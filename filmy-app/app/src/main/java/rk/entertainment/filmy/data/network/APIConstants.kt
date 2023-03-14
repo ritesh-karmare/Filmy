@@ -5,7 +5,7 @@ import rk.entertainment.filmy.BuildConfig
 const val API_KEY = BuildConfig.API_KEY
 const val BASE_URL = "https://api.themoviedb.org/3/"
 
-const val ENDPOINT_SEARCH_MOVIES = "search/movie/"
+const val ENDPOINT_SEARCH_MOVIES = "search/movie"
 
 const val ENDPOINT_MOVIE = "movie/"
 const val ENDPOINT_NOW_PLAYING = "now_playing"
