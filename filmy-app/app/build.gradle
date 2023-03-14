@@ -9,16 +9,16 @@ plugins {
 }
 
 ext.versionMajor = 5
-ext.versionMinor = 0
-ext.versionPatch = 0
+ext.versionMinor = 1
+ext.versionPatch = 1
 ext.versionClassifier = "dev"
 ext.isDevelopment = false
 ext.minimumSdkVersion = 21
-ext.targetSdkVersion = 32
+ext.targetSdkVersion = 33
 
 android {
 
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "rk.entertainment.filmy"
@@ -31,8 +31,8 @@ android {
 
         multiDexEnabled true
 
-        buildConfigField 'String', "API_KEY", "\"4442b60538fa5fc12f44852bd9d069c3\""
-        buildConfigField 'String', "YOUTUBE_API_KEY", "\"AIzaSyCbxLvtnOUzrFVZ9wIeIR4OBmjGOLRoDKI\""
+        buildConfigField 'String', "API_KEY", API_KEY
+        buildConfigField 'String', "YOUTUBE_API_KEY",YOUTUBE_API_KEY
 
     }
 
@@ -60,9 +60,9 @@ dependencies {
 
     // Support dependencies
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'androidx.appcompat:appcompat:1.5.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
+    implementation 'com.google.android.material:material:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
@@ -72,7 +72,7 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
     implementation("com.squareup.retrofit2:retrofit:2.9.0") { exclude module: 'okhttp' }
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    implementation "com.google.code.gson:gson:2.9.0"
+    implementation "com.google.code.gson:gson:2.9.1"
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.13.2'
@@ -89,13 +89,13 @@ dependencies {
 
     // Coroutines, ViewModel, LiveData
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0'
 
     // hilt
-    implementation "com.google.dagger:hilt-android:2.42"
-    kapt "com.google.dagger:hilt-compiler:2.42"
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
 
 }
 
