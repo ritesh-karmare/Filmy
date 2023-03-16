@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import rk.entertainment.filmy.data.models.movieList.MoviesListResponse
 import rk.entertainment.filmy.data.network.*
 import rk.entertainment.filmy.domain.repository.MoviesRepository
-import rk.entertainment.filmy.utils.MovieModuleTypes
+import rk.entertainment.filmy.data.models.MovieModuleTypes
 import javax.inject.Inject
 
 class GetMoviesListUseCase @Inject constructor(private val repository: MoviesRepository) {

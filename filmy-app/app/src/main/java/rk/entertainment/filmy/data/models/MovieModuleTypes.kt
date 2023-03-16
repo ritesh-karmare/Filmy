@@ -1,4 +1,4 @@
-package rk.entertainment.filmy.utils
+package rk.entertainment.filmy.data.models
 
 enum class MovieModuleTypes {
     NOW_PLAYING,
