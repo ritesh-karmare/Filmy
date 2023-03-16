@@ -48,10 +48,12 @@
 
 # Gson uses generic type information stored in a class file when working with fields. Proguard
 # removes such information by default, so configure it to keep all of it.
--keepattributes Signature
+#-keepattributes Signature
 
 # For using GSON @Expose annotation
--keepattributes *Annotation*
+#-keepattributes *Annotation*
+
+-keepattributes SourceFile,LineNumberTable,Exceptions,InnerClasses,Signature,Deprecated,*Annotation*,EnclosingMethod
 
 # Gson specific classes
 -dontwarn sun.misc.**
@@ -70,5 +72,8 @@
 -keepclassmembers,allowobfuscation class * {
   @com.google.gson.annotations.SerializedName <fields>;
 }
+
+-keep class rk.entertainment.filmy.data.models.** { *; }
+-keep class rk.entertainment.filmy.data.network.ErrorType
 
 ##---------------End: proguard configuration for Gson  ----------

@@ -20,7 +20,7 @@ import rk.entertainment.filmy.ui.features.movieDetails.MovieDetailsActivity
 import rk.entertainment.filmy.utils.ConnectionUtils
 import rk.entertainment.filmy.utils.EndlessRecyclerViewOnScrollListener
 import rk.entertainment.filmy.utils.Logs
-import rk.entertainment.filmy.utils.MovieModuleTypes
+import rk.entertainment.filmy.data.models.MovieModuleTypes
 import rk.entertainment.filmy.utils.UIUtils.displayMessage
 
 @AndroidEntryPoint

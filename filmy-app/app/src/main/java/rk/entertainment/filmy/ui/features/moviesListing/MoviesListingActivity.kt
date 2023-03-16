@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import rk.entertainment.filmy.R
 import rk.entertainment.filmy.databinding.ActivityMoviesMainBinding
 import rk.entertainment.filmy.ui.features.search.SearchActivity
-import rk.entertainment.filmy.utils.MovieModuleTypes
+import rk.entertainment.filmy.data.models.MovieModuleTypes
 import rk.entertainment.filmy.utils.ViewPagerAdapter
 
 @AndroidEntryPoint

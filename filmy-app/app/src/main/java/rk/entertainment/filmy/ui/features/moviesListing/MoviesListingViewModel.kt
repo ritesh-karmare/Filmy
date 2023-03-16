@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import rk.entertainment.filmy.data.network.Resource
 import rk.entertainment.filmy.domain.useCase.GetMoviesListUseCase
-import rk.entertainment.filmy.utils.MovieModuleTypes
+import rk.entertainment.filmy.data.models.MovieModuleTypes
 import javax.inject.Inject
 
 @HiltViewModel
