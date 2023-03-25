@@ -18,7 +18,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".ui.features.splash.SplashActivity"
+            android:name=".splash.SplashActivity"
             android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/splashTheme"
@@ -30,30 +30,30 @@
         </activity>
 
         <activity
-            android:name=".ui.features.moviesListing.MoviesListingActivity"
+            android:name="rk.entertainment.movie_listing.MoviesListingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".ui.features.movieDetails.MovieDetailsActivity"
+            android:name="rk.entertainment.movie_details.MovieDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MovieDetailTheme"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".ui.features.search.SearchActivity"
+            android:name="rk.entertainment.search.SearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".ui.features.movieDetails.TrailerActivity"
+            android:name="rk.entertainment.movie_details.TrailerActivity"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/TrailerTheme" />
 
         <meta-data
-            android:name="rk.entertainment.filmy.utils.MyGlideModule"
+            android:name="rk.entertainment.common.utils.MyGlideModule"
             android:value="AppGlideModule" />
 
     </application>

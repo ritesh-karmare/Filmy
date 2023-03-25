@@ -74,6 +74,6 @@
 }
 
 -keep class rk.entertainment.filmy.data.models.** { *; }
--keep class rk.entertainment.filmy.data.network.ErrorType
+-keep class rk.entertainment.data.network.ErrorType
 
 ##---------------End: proguard configuration for Gson  ----------

@@ -1,0 +1,72 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+//    namespace 'rk.entertainment.movie_details'
+    compileSdkVersion 33
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 33
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        buildConfigField 'String', "YOUTUBE_API_KEY", YOUTUBE_API_KEY
+
+        defaultPublishConfig 'release'
+        publishNonDefault true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+}
+
+dependencies {
+
+    implementation(project(":domain"))
+    implementation(project(":common"))
+
+    implementation Dependencies.appCompat
+    implementation Dependencies.recyclerView
+    implementation Dependencies.material
+    implementation Dependencies.constraintLayout
+    implementation Dependencies.swipeRefreshLayout
+
+    // Glide
+    implementation Dependencies.glide
+    kapt Dependencies.glideCompilerKapt
+
+    implementation files(Dependencies.youtubePlayer)
+
+    // Coroutines, ViewModel, LiveData
+    implementation Dependencies.coroutines
+    implementation Dependencies.viewModel
+    implementation Dependencies.liveData
+    implementation Dependencies.lifeCycleKtx
+
+    // hilt
+    implementation Dependencies.hilt
+    kapt Dependencies.hiltCompilerKapt
+
+}

@@ -11,10 +11,10 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import rk.entertainment.common.utils.BASE_URL
+import rk.entertainment.data.network.APIService
+import rk.entertainment.data.network.RequestInterceptor
 import rk.entertainment.filmy.BuildConfig
-import rk.entertainment.filmy.data.network.APIService
-import rk.entertainment.filmy.data.network.BASE_URL
-import rk.entertainment.filmy.data.network.RequestInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
